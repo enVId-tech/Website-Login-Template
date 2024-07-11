@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../assets/scss/login.scss';
+import styles from '@/styles/global.module.scss';
 
 interface LoginData {
     status: number;

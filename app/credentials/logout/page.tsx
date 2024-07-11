@@ -1,5 +1,5 @@
 import React from "react";
-import '../../assets/scss/logout.scss';
+import styles from "@/styles/logout.module.scss";
 
 interface LogoutData {
     error: string;
