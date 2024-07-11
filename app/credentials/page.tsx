@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation';
 import React from 'react';
 
-export default function CredentialsRedirect() {
-    redirect("/credentials/login");
-
+export default async function CredentialsRedirect() {
+    redirect('/credentials/login');
+    
     return (
         <section id="credentialsRedirect">
             <div id="container">
