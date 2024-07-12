@@ -85,5 +85,3 @@ const Sidebar: React.FC = (): React.JSX.Element => {
         </div>
     )
 }
-
-export default Sidebar;

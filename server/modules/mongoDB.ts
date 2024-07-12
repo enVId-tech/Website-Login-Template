@@ -55,7 +55,7 @@ class MongoDBClient {
     collectionName: string,
     data: OptionalUnlessRequiredId<T>
   ): Promise<[string, boolean]> {
-    const collection = this.getCollection<T>(collectionName);
+    const collection = this.getCollection<Document>(collectionName);
     const result = await collection.insertOne(data);
     const inserted = !!result.insertedId;
     console.log(inserted ? `Inserted document with _id: ${result.insertedId}` : "No document was inserted");
