@@ -2,9 +2,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import '../../assets/scss/homepage.scss';
-import { UserData } from '@/components/ts/interfaces.ts';
-import getUserData from '@/components/ts/getUserData.ts';
-import Sidebar from '@/templates/sidebar.tsx';
+import { UserData } from '@/app/api/interfaces';
+import getUserData from '@/app/api/getUserData';
+import Sidebar from '@/components/Sidebar';
 
 const HomePage: React.FC = (): React.JSX.Element => {
     const [data, setData] = React.useState<UserData | null | undefined>();

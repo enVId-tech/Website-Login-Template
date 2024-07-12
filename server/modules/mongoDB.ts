@@ -290,11 +290,8 @@ async function getItemsFromDatabase<T extends Document>(
     }
 
     return JSON.stringify(items);
-  } catch (error) {
-    console.error("Error getting items from database:");
-    console.error("Error name:", error.name);
-    console.error("Error message:", error.message);
-    console.error("Stack trace:", error.stack);
+  } catch (error: unknown) {
+    console.error("Error getting items from MongoDB:", error as string);
     throw new Error(error as string);
   }
 }

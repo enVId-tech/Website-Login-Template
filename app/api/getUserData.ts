@@ -1,4 +1,4 @@
-import { UserData } from "@/components/ts/interfaces.ts";
+import { UserData } from "@/app/api/interfaces";
 
 async function getUserData(): Promise<UserData[] | null | undefined> {
     try {
