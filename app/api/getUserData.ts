@@ -1,4 +1,4 @@
-import { UserData } from "@/app/api/interfaces";
+import { UserData } from "./interfaces";
 
 async function getUserData(): Promise<UserData[] | null | undefined> {
     try {
