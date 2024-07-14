@@ -16,6 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <title>Template NextJS Login</title>
+        <meta name="description" content="Created by enVId Tech(TM) 2024" />
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   );

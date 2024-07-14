@@ -1,12 +1,17 @@
+import RootLayout from "@/app_template/layout";
+
 // import RootLayout from '@/pages/layout.tsx';
-import dotenv from 'dotenv';
-import handler from '../api/realtime/page';
-dotenv.config({ path: '@/app/api/environment.local.env' });
-async function getData(): Promise<string | null> {
+async function getData() {
     try {
-        const response = await fetch('http://localhost:3000/api/realtime');
-        const data = await response.json();
-        return data.timestamp;
+        const response: Response | null = await fetch('http://localhost:3000/api/realtime', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        console.log(response);
+        const data: string = await response.json();
+        console.log(data);
     } catch (error) {
         console.error('Failed to fetch real-time data:', error);
         return null;
@@ -14,15 +19,15 @@ async function getData(): Promise<string | null> {
 }
 
 const Home = async () => {
-    const data: string | null = await getData();
+    const data: any = await getData();
     
     return (
-        // <RootLayout>
+        <RootLayout>
             <div>
                 <h1>Home Page</h1>
                 <p>Static Data: {data}</p>
             </div>
-        // </RootLayout>
+        </RootLayout>
     );
 };
 
