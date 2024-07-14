@@ -1,32 +1,24 @@
-import RootLayout from "@/app_template/layout";
-
-// import RootLayout from '@/pages/layout.tsx';
-async function getData() {
-    try {
-        const response: Response | null = await fetch('http://localhost:3000/api/realtime', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        console.log(response);
-        const data: string = await response.json();
-        console.log(data);
-    } catch (error) {
-        console.error('Failed to fetch real-time data:', error);
-        return null;
-    }
-}
+import RootLayout from "@/app/_components/layout.tsx";
+import getUserData from "@/app/api/getUserData.ts";
+import { UserData } from "@/app/api/interfaces.ts";
 
 const Home = async () => {
-    const data: any = await getData();
-    
+    // const data: any = await getData();
+    const data: UserData[] | null | undefined = await getUserData();
+
+    if (data === null || !data) {
+        window.location.href = '/login';
+        return;
+    }
+
     return (
         <RootLayout>
-            <div>
-                <h1>Home Page</h1>
-                <p>Static Data: {data}</p>
-            </div>
+            <section id="home">
+                <div>
+                    <h1>Home Page</h1>
+                    <p>Static Data: {}</p>
+                </div>
+            </section>
         </RootLayout>
     );
 };
