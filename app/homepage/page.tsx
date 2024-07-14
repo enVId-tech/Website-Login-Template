@@ -1,14 +1,14 @@
 import RootLayout from "@/app/_components/layout.tsx";
 import getUserData from "@/app/api/getUserData.ts";
 import { UserData } from "@/app/api/interfaces.ts";
+import { redirect } from 'next/navigation';
 
 const Home = async () => {
     // const data: any = await getData();
     const data: UserData[] | null | undefined = await getUserData();
 
     if (data === null || !data) {
-        window.location.href = '/login';
-        return;
+        redirect('/login');
     }
 
     return (
