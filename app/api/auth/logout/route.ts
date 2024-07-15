@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import cookieParser from 'cookie-parser';
 import { Response } from 'express';
 
 const logoutHandler = async (req: NextApiRequest, res: Response) => {
