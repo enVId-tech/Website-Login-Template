@@ -1,6 +1,7 @@
 import RootLayout from "@/app/_components/layout.tsx";
 import { redirect } from "next/navigation";
 import React from "react";
+import { LoginComponent } from "../_components/login";
 
 interface LoginData {
     status: number;
@@ -8,6 +9,7 @@ interface LoginData {
 }
 
 async function guestLogin(): Promise<void> {
+    "use server";
     try {
         const response: Response = await fetch('/login/guest', {
             method: 'GET',
@@ -30,46 +32,10 @@ async function guestLogin(): Promise<void> {
     }
 }
 
-function googleLogin(): void {
+async function googleLogin(): Promise<void> {
+    "use server";
     redirect('/auth/google');
 }
-
-async function loginToAccount(): Promise<void> {
-    const username = document.getElementById('username') as HTMLInputElement;
-    const password = document.getElementById('password') as HTMLInputElement;
-
-    const jsonData: object = {
-        "method": "POST",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "body": JSON.stringify({
-            "username": username.value,
-            "password": password.value
-        })
-    }
-
-    try {
-        const response: Response = await fetch('/login/user', jsonData);
-        const data: LoginData = await response.json();
-
-        if (data.status === 200) {
-            // console.log('Login successful!');
-            redirect('/');
-        } else if (data.status === 404) {
-            console.error('User not found:', data.message);
-            alert('User not found. Please try again.');
-        } else if (data.status === 401) {
-            console.error('Incorrect password:', data.message);
-            alert('Incorrect password. Please try again.');
-        } else {
-            console.error('Login failed:', data.message);
-            alert('Login failed. Please try again.');
-        }
-    } catch (error: unknown) {
-        console.error('Error:', error as string);
-    }
-};
 
 export default async function Login(): Promise<React.JSX.Element> {
     return (
@@ -79,19 +45,18 @@ export default async function Login(): Promise<React.JSX.Element> {
                     <div id="regLogin">
                         <h1>Login</h1>
 
-                        <input id="username" type="text" placeholder="Email" />
-                        <input id="password" type="password" placeholder="Password" autoComplete='current-password' />
-
-                        <button onClick={loginToAccount}>Login</button>
-
+                        <LoginComponent />
 
                         <hr />
 
-                        <button onClick={() => googleLogin}>Register/Sign In with Google</button>
-
+                        <form action={googleLogin}>
+                            <button>Register/Sign In with Google</button>
+                        </form>
                         <hr />
 
-                        <button onClick={() => guestLogin}>Continue as Guest</button>
+                        <form action={guestLogin}>
+                            <button>Continue as Guest</button>
+                        </form>
                     </div>
                 </div>
             </section>
