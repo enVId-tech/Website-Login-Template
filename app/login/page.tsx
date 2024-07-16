@@ -34,9 +34,7 @@ function googleLogin(): void {
     redirect('/auth/google');
 }
 
-async function loginToAccount(event: React.FormEvent<HTMLFormElement>): Promise<void> {
-    event.preventDefault();
-
+async function loginToAccount(): Promise<void> {
     const username = document.getElementById('username') as HTMLInputElement;
     const password = document.getElementById('password') as HTMLInputElement;
 
@@ -57,7 +55,7 @@ async function loginToAccount(event: React.FormEvent<HTMLFormElement>): Promise<
 
         if (data.status === 200) {
             // console.log('Login successful!');
-            window.location.href = '/';
+            redirect('/');
         } else if (data.status === 404) {
             console.error('User not found:', data.message);
             alert('User not found. Please try again.');
@@ -81,12 +79,11 @@ export default async function Login(): Promise<React.JSX.Element> {
                     <div id="regLogin">
                         <h1>Login</h1>
 
-                        <form onSubmit={loginToAccount}>
-                            <input id="username" type="text" placeholder="Email" />
-                            <input id="password" type="password" placeholder="Password" autoComplete='current-password' />
+                        <input id="username" type="text" placeholder="Email" />
+                        <input id="password" type="password" placeholder="Password" autoComplete='current-password' />
 
-                            <button type="submit">Login</button>
-                        </form>
+                        <button onClick={loginToAccount}>Login</button>
+
 
                         <hr />
 

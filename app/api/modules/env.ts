@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 
-dotenv.config({ path: './server/modules/credentials.env.local' });
+dotenv.config({ path: '@/app/api/modules/credentials.env.local' });
 
 /**
  * The URI for the MongoDB database.

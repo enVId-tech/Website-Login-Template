@@ -3,6 +3,7 @@ import { deleteFromDatabase, getItemsFromDatabase } from "@/app/api/modules/mong
 
 export async function POST(req: Request, res: Response) {
     try {
+        console.log("req.cookies:", req.cookies);
         if (req.cookies["userId"] === "guest") {
             res.status(401).json({ status: 401, message: "You must be logged in to view user data" });
             return;

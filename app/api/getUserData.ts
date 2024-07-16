@@ -1,8 +1,9 @@
+import { redirect } from "next/navigation";
 import { UserData } from "./interfaces";
 
 export default async function getUserData(): Promise<UserData[] | null | undefined> {
     try {
-        const response: Response = await fetch('http://localhost:3000/post/user', 
+        const response: Response = await fetch('http://localhost:3000/api/user/data', 
             { 
                 method: "POST", 
                 credentials: 'include',
@@ -15,18 +16,16 @@ export default async function getUserData(): Promise<UserData[] | null | undefin
         
         if (response.status === 404) {
             console.error('Error: No user data found');
-            window.location.href = '/login';
-            return null;
+            redirect('/login');
         } else if (response.status === 400) {
             console.error('Error: Bad request');
-            window.location.href = '/login';
-            return null;
+            redirect('/login');
         } else if (response.status === 401) {
             console.log("Guest account");
             return
         } else if (response.status === 500) {
             console.error('Error: An error occurred. Please try again later.');
-            window.location.href = '/login';
+            redirect('/login');
         }
 
         const result: UserData[] | null | undefined = await response.json();
