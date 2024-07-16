@@ -20,6 +20,7 @@ function getData(): UserData | undefined {
 }
 
 async function logout(): Promise<void> {
+    "use server";
     try {
         const response = await fetch('/api/auth/logout', { "method": "POST", "credentials": "include" });
         const data = await response.json();
@@ -35,6 +36,7 @@ async function logout(): Promise<void> {
 }
 
 async function deleteAccount(): Promise<void> {
+    "use server";
     try {
         if (!confirm('Are you sure you want to delete your account?')) {
             return;
@@ -59,6 +61,43 @@ async function deleteAccount(): Promise<void> {
     }
 }
 
+async function setPassword(): Promise<void> {
+    "use server";
+    try {
+        const password: string = "e"; // passwordRef.current?.value as string;
+        const confirmPassword: string = "e" // confirmPasswordRef.current?.value as string;
+
+        if (password === "" || confirmPassword === "") {
+            alert('Please fill out all fields');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert('Passwords do not match');
+            return;
+        }
+
+        const dataJson = {
+            "method": "POST",
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": JSON.stringify({
+                "password": password
+            })
+        }
+
+        const response = await fetch('/post/password', { ...dataJson, "credentials": "include" });
+        const data = await response.json();
+
+        if (data.error) {
+            console.error(data.error);
+        }
+    } catch (error: unknown) {
+        console.error('Error:', error as string);
+    }
+}
+
 export default function AccountPage(): React.JSX.Element {
     return (
         <RootLayout>
@@ -69,8 +108,8 @@ export default function AccountPage(): React.JSX.Element {
                     <form className={styles.info} action={setPassword}>
                         <h2>Username: {data?.displayName}</h2>
                         <h2>Email: {data?.email}</h2>
-                        <input type='password' placeholder='Password' ref={passwordRef} />
-                        <input type='password' placeholder='Confirm Password' ref={confirmPasswordRef} />
+                        <input type='password' placeholder='Password' />
+                        <input type='password' placeholder='Confirm Password' />
                         <button type="submit">Change Password</button>
                     </form>
 
@@ -79,7 +118,7 @@ export default function AccountPage(): React.JSX.Element {
                         <form action={logout}>
                             <button>Logout</button>
                         </form>
-                        
+
                         <form action={deleteAccount}>
                             <button className={styles.delete}>Delete Account</button>
                         </form>    

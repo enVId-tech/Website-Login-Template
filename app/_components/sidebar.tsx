@@ -6,12 +6,13 @@ import { redirect } from "next/navigation";
 import { Button } from 'react-bootstrap';
 
 async function account(): Promise<void> {
-    if (await getUserData() === null) {
-        redirect('/login');
-    } else if (await getUserData() === undefined) {
-        alert('Guest accounts cannot access this page. Please login.');
-        return;
-    }
+    "use server";
+    // if (await getUserData() === null) {
+    //     redirect('/login');
+    // } else if (await getUserData() === undefined) {
+    //     alert('Guest accounts cannot access this page. Please login.');
+    //     return;
+    // }
 
     redirect('/account');
 }
@@ -35,7 +36,9 @@ export default function Sidebar(): React.JSX.Element {
             <div className={styles.profile}>
                 <img src={data?.profilePicture ? data?.profilePicture : "https://via.placeholder.com/150"} alt="Profile Picture" />
                 <h2>Logged in as <br /> {data?.firstName}</h2>
-                <Button>Account</Button>
+                <form action={account}>
+                    <button>Account</button>
+                </form>
             </div>
             <div className={styles.pages}>
                 <span className="pageSelector">
