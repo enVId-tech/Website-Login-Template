@@ -3,6 +3,7 @@ import getUserData from "@/app/api/getUserData.ts";
 import { UserData } from "@/app/api/interfaces.ts";
 import { redirect } from 'next/navigation';
 import styles from '@/assets/styles/home.module.scss';
+import Sidebar from "../_components/sidebar";
 
 interface HomeData {
     error: string;
@@ -43,6 +44,7 @@ export default async function Home(): Promise<React.JSX.Element> {
     if (!data) {
         return <RootLayout>
             <section id="home">
+                <Sidebar />
                 <div id="container">
                     <h1>Welcome, Guest Account!</h1>
                 </div>
@@ -53,6 +55,7 @@ export default async function Home(): Promise<React.JSX.Element> {
     return (
         <RootLayout>
             <section id="home">
+                <Sidebar />
                 <div id="container">
                     <h1>Welcome, {data?.displayName}!</h1>
                 </div>
