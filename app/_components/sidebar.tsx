@@ -46,19 +46,11 @@ export default function Sidebar(): React.JSX.Element {
                         <h1>Home</h1>
                     </a>
                 </span>
-
                 <span className="pageSelector">
-                    <a href="/calendar">
-                        <h1>Calendar</h1>
+                    <a href="/ex_1">
+                        <h1>Ex. Page 1</h1>
                     </a>
                 </span>
-
-                <span className="pageSelector">
-                    <a href="/events">
-                        <h1>Events</h1>
-                    </a>
-                </span>
-
                 <span className="pageSelector">
                     <a href='/logout'>
                         <h1>Logout</h1>

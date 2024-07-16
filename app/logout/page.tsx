@@ -2,25 +2,28 @@ import RootLayout from "@/app/_components/layout.tsx";
 import getUserData from "@/app/api/getUserData.ts";
 import { UserData } from "@/app/api/interfaces.ts";
 import styles from '@/styles/logout.module.scss';
+import { redirect } from "next/navigation";
 
 interface LogoutData {
     error: string;
 }
 
 async function handleLogout(): Promise<void> {
-    const response: Response = await fetch("/credentials/logout", { "method": "POST", "credentials": "include" });
+    "use server";
+    const response: Response = await fetch("/api/auth/logout", { "method": "POST", "credentials": "include" });
     const data: LogoutData = await response.json();
 
     if (data.error) {
         alert(data.error);
-        window.location.href = "/login";
+        redirect("/login");
     } else {
-        window.location.href = "/";
+        redirect("/")
     }
 }
 
-function handleCancel(): void {
-    window.location.href = "/";
+async function handleCancel(): Promise<void> {
+    "use server";
+    redirect("/");
 }
 
 export default async function Logout(): Promise<React.JSX.Element> {
@@ -28,12 +31,18 @@ export default async function Logout(): Promise<React.JSX.Element> {
 
     return (
         <RootLayout>
-            <section id="logout">
-                <div id="container">
+            <section className={styles.logout}>
+                <div className={styles.container}>
                     <h1>Logout</h1>
                     <p>Are you sure you want to logout?</p>
-                    <button onClick={() => handleLogout()}>Yes</button>
-                    <button onClick={() => handleCancel()}>No</button>
+
+                    <form action={handleLogout}>
+                        <button>Yes</button>
+                    </form>
+
+                    <form action={handleCancel}>
+                        <button>No</button>
+                    </form>
                 </div>
             </section>
         </RootLayout>
