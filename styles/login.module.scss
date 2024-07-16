@@ -1,4 +1,4 @@
-#login {
+.login {
     text-align: center;
     width: 100vw;
     height: 100vh;
@@ -7,7 +7,7 @@
     align-items: center;
     background-color: #f5f5f5;
 
-    #container {
+    .container {
         width: 100%;
         max-width: 25vw;
         padding: 2.5vw;
@@ -19,7 +19,7 @@
         align-items: center;
         width: 100%;
 
-        #regLogin {
+        .regLogin {
             h1 {
                 font-size: 2vw;
                 margin-bottom: 20px;

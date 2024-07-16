@@ -2,6 +2,7 @@ import RootLayout from "@/app/_components/layout.tsx";
 import { redirect } from "next/navigation";
 import React from "react";
 import { LoginComponent } from "../_components/login";
+import styles from "@/styles/login.module.scss";
 
 interface LoginData {
     status: number;
@@ -40,9 +41,9 @@ async function googleLogin(): Promise<void> {
 export default async function Login(): Promise<React.JSX.Element> {
     return (
         <RootLayout>
-            <section id="login">
-                <div id="container">
-                    <div id="regLogin">
+            <section className={styles.login}>
+                <div className={styles.container}>
+                    <div className={styles.regLogin}>
                         <h1>Login</h1>
 
                         <LoginComponent />

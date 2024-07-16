@@ -1,4 +1,5 @@
 import Head from "next/head"
+import '@/styles/global.scss';
 
 export const metadata = {
   title: 'Next.js',
