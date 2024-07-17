@@ -1,5 +1,5 @@
 import { Collection, Db, Filter, MongoClient, WithId, Document, OptionalUnlessRequiredId } from "mongodb";
-import { CLIENT_DB } from "./env.ts";
+import { CLIENT_DB, MONGODB_URI } from "./env.ts";
 
 class MongoDBClient {
   private client: MongoClient;
@@ -123,7 +123,7 @@ class MongoDBClient {
 }
 
 // Create a singleton instance of the MongoDB client
-const mongoDBClient = new MongoDBClient(process.env.MONGODB_URI!);
+const mongoDBClient = new MongoDBClient(MONGODB_URI);
 
 /**
  * Connects to the MongoDB database.

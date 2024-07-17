@@ -1,24 +1,24 @@
 import { Request, Response } from "express";
+import { NextApiResponse } from "next";
 import { deleteFromDatabase, getItemsFromDatabase } from "@/app/api/modules/mongoDB.ts";
+import { NextResponse } from "next/server";
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request, res: NextApiResponse) {
     try {
         console.log("req.cookies:", req.cookies);
         if (req.cookies["userId"] === "guest") {
-            res.status(401).json({ status: 401, message: "You must be logged in to view user data" });
-            return;
+            return NextResponse.json({ status: 401, message: "You must be logged in to view user data" });
         } else if (!req.cookies["userId"]) {
-            res.status(404).json({ status: 404, message: "No data found" });
-            return;
+            return NextResponse.json({ status: 404, message: "No data found" });
         }
 
         const fileData = JSON.parse(await getItemsFromDatabase("users", { userId: req.cookies["userId"] }));
 
         if (!fileData || fileData.length === 0) {
-            res.status(404).json({ status: 404, message: "No data found" });
+            NextResponse.json({ status: 404, message: "No data found" });
         } else if (fileData.length > 1) {
             await deleteFromDatabase({ userId: req.cookies["userId"] }, "users", "many");
-            res.status(500).json({ status: 500, message: "Multiple data found" });
+            return NextResponse.json({ status: 500, message: "Multiple data found" });
         }
 
         if (fileData[0]._id) {
@@ -29,8 +29,9 @@ export async function POST(req: Request, res: Response) {
             delete fileData[0].userId;
         }
 
-        res.status(200).json(fileData);
+        return NextResponse.json(fileData);
     } catch (error: unknown) {
         console.error("Error:", error);
+        return NextResponse.json({ status: 500, message: "Internal server error" });
     }
 }

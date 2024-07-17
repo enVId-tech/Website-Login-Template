@@ -16,9 +16,9 @@ async function handleLogout(): Promise<void> {
     if (data.error) {
         alert(data.error);
         redirect("/login");
-    } else {
-        redirect("/")
     }
+    
+    redirect("/");
 }
 
 async function handleCancel(): Promise<void> {

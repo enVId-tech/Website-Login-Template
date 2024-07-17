@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 
-dotenv.config({ path: '@/app/api/modules/credentials.env.local' });
+dotenv.config({ path: './credentials.env.local' });
 
 /**
  * The URI for the MongoDB database.
@@ -37,6 +37,11 @@ const CLIENT_PORT: number = parseInt(process.env.CLIENT_PORT!) || 3000;
  */
 const SERVER_PORT: number = process.env.PORT as unknown as number || parseInt(process.env.SERVER_PORT!) || 3001;
 
+/**
+ * The URI for the MongoDB database.
+ */
+const MONGODB_URI: string = process.env.MONGODB_URI! || "mongodb://localhost:27017";
+
 const env: object = {
     URI,
     CLIENT_DB,
@@ -45,6 +50,7 @@ const env: object = {
     APP_HOSTNAME,
     CLIENT_PORT,
     SERVER_PORT,
+    MONGODB_URI
 }
 
 export default env;
@@ -56,4 +62,5 @@ export {
     APP_HOSTNAME,
     CLIENT_PORT,
     SERVER_PORT,
+    MONGODB_URI
 }
