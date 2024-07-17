@@ -53,6 +53,7 @@ export default async function Login(): Promise<React.JSX.Element> {
                         <form action={googleLogin}>
                             <button>Register/Sign In with Google</button>
                         </form>
+                        
                         <hr />
 
                         <form action={guestLogin}>

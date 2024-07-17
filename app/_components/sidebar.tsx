@@ -3,16 +3,15 @@ import styles from "@/styles/sidebar.module.scss";
 import getUserData from "@/app/api/getUserData.ts";
 import { UserData } from "@/app/api/interfaces.ts";
 import { redirect } from "next/navigation";
-import { Button } from 'react-bootstrap';
 
 async function account(): Promise<void> {
     "use server";
-    // if (await getUserData() === null) {
-    //     redirect('/login');
-    // } else if (await getUserData() === undefined) {
-    //     alert('Guest accounts cannot access this page. Please login.');
-    //     return;
-    // }
+    if (await getUserData() === null) {
+        redirect('/login');
+    } else if (await getUserData() === undefined) {
+        alert('Guest accounts cannot access this page. Please login.');
+        return;
+    }
 
     redirect('/account');
 }

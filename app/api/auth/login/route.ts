@@ -7,7 +7,7 @@ export const runtime = "nodejs";
 
 
 export async function POST(req: Request, res: Response) {
-        try {
+    try {
         const data = req.body;
 
         if (!data) {
