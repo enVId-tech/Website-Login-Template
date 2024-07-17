@@ -12,7 +12,7 @@ interface LoginData {
 async function guestLogin(): Promise<void> {
     "use server";
     try {
-        const response: Response = await fetch('/login/guest', {
+        const response: Response = await fetch('http://localhost:3000/api/auth/login', {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -23,7 +23,7 @@ async function guestLogin(): Promise<void> {
 
         if (response.status === 200) {
             // console.log('Login successful!');
-            window.location.href = '/';
+            redirect('/');
         } else {
             console.error('Login failed:', response.statusText);
             alert('Login failed. Please try again.');

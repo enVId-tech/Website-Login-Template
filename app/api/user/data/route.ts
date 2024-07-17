@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request } from "express";
 import { NextApiResponse } from "next";
 import { deleteFromDatabase, getItemsFromDatabase } from "@/app/api/modules/mongoDB.ts";
 import { NextResponse } from "next/server";

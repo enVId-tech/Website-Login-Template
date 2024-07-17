@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getItemsFromDatabase } from "@/app/api/modules/mongoDB.ts";
 import { comparePassword } from "@/app/api/modules/encryption.ts";
 import { Request, Response } from "express";
@@ -17,11 +17,9 @@ export async function POST(req: Request, res: Response) {
         const fileData = JSON.parse(await getItemsFromDatabase("users", { email: data.username }));
 
         if (!fileData || fileData.length === 0) {
-            res.status(404).json({ status: 404, message: "No data found" });
-            throw new Error("No data found");
+            return NextResponse.json({ status: 404, message: "No data found" });
         } else if (fileData.length > 1) {
-            res.status(500).json({ status: 500, message: "Multiple data found" });
-            throw new Error("Multiple data found");
+            return NextResponse.json({ status: 500, message: "Multiple data found" });
         }
 
         if (await comparePassword(data.password, fileData[0].password)) {
@@ -30,11 +28,12 @@ export async function POST(req: Request, res: Response) {
                 httpOnly: true,
             });
 
-            res.status(200).json({ status: 200, message: "Logged in" });
+            return NextResponse.json({ status: 200, message: "Logged in" });
         } else {
-            res.status(401).json({ status: 401, message: "Incorrect password" });
+            return NextResponse.json({ status: 401, message: "Incorrect password" });
         }
     } catch (error: unknown) {
         console.error("Error:", error);
+        return NextResponse.json({ status: 500, message: "Internal server error" });
     }
 };
