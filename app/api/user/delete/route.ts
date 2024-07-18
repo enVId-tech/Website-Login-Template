@@ -22,7 +22,7 @@ export async function POST(req: Request, res: Response) {
 
         res.clearCookie("userId");
 
-        return NextResponse.json({ status: 200, message: "Data deleted" });
+        return NextResponse.redirect("/login");
     } catch (error: unknown) {
         console.error("Error:", error);
         return NextResponse.json({ status: 500, message: "Internal server error" });

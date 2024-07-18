@@ -23,11 +23,19 @@ function getData(): UserData | undefined {
 async function logout(): Promise<void> {
     "use server";
     try {
-        const response = await fetch('/api/auth/logout', { "method": "POST", "credentials": "include" });
+        const response = await fetch('http://localhost:3000/api/auth/logout', { 
+            method: "POST", 
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: "include",
+        });
+
         const data = await response.json();
 
         if (data.error) {
             console.error(data.error);
+            redirect('/home');
         } else {
             redirect('/login');
         }
@@ -43,7 +51,7 @@ async function deleteAccount(): Promise<void> {
             return;
         }
 
-        const response = await fetch('/post/delete', { "method": "POST", "credentials": "include" });
+        const response = await fetch('http://localhost:3000/post/delete', { "method": "POST", "credentials": "include" });
 
         if (response.status === 401) {
             alert('You must be logged in to delete your account');
@@ -55,44 +63,7 @@ async function deleteAccount(): Promise<void> {
             alert('No account found');
             return;
         } else {
-            window.location.href = '/login';
-        }
-    } catch (error: unknown) {
-        console.error('Error:', error as string);
-    }
-}
-
-async function setPassword(passwordRef: React.RefObject<HTMLInputElement>, confirmPasswordRef: React.RefObject<HTMLInputElement>): Promise<void> {
-    "use server";
-    try {
-        const password: string = passwordRef.current?.value as string;
-        const confirmPassword: string = confirmPasswordRef.current?.value as string;
-
-        if (password === "" || confirmPassword === "") {
-            alert('Please fill out all fields');
-            return;
-        }
-
-        if (password !== confirmPassword) {
-            alert('Passwords do not match');
-            return;
-        }
-
-        const dataJson = {
-            "method": "POST",
-            "headers": {
-                "Content-Type": "application/json"
-            },
-            "body": JSON.stringify({
-                "password": password
-            })
-        }
-
-        const response = await fetch('/post/password', { ...dataJson, "credentials": "include" });
-        const data = await response.json();
-
-        if (data.error) {
-            console.error(data.error);
+            redirect('/login');
         }
     } catch (error: unknown) {
         console.error('Error:', error as string);

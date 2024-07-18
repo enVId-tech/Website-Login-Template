@@ -10,15 +10,15 @@ interface LogoutData {
 
 async function handleLogout(): Promise<void> {
     "use server";
-    const response: Response = await fetch("/api/auth/logout", { "method": "POST", "credentials": "include" });
+    const response: Response = await fetch("http://localhost:3000/api/auth/logout", { "method": "POST", "credentials": "include" });
     const data: LogoutData = await response.json();
 
     if (data.error) {
         alert(data.error);
-        redirect("/login");
+        redirect("/home");
     }
     
-    redirect("/");
+    redirect("/login");
 }
 
 async function handleCancel(): Promise<void> {
