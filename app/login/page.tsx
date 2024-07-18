@@ -22,11 +22,10 @@ async function guestLogin(): Promise<void> {
         });
 
         if (response.status === 200) {
-            // console.log('Login successful!');
+            console.log('Login successful!');
             redirect('/');
         } else {
             console.error('Login failed:', response.statusText);
-            alert('Login failed. Please try again.');
         }
     } catch (error: unknown) {
         console.error('Error:', error as string);
@@ -53,7 +52,7 @@ export default async function Login(): Promise<React.JSX.Element> {
                         <form action={googleLogin}>
                             <button>Register/Sign In with Google</button>
                         </form>
-                        
+
                         <hr />
 
                         <form action={guestLogin}>

@@ -22,7 +22,7 @@ const Sidebar: React.FC = (): React.JSX.Element => {
                         firstName: 'Guest',
                         lastName: 'Account',
                         email: '',
-                        profilePicture: 'https://www.kravemarketingllc.com/wp-content/uploads/2018/09/placeholder-user-500x500.png',
+                        profilePicture: '',
                         displayName: 'Guest Account',
                         hd: '',
                     })
