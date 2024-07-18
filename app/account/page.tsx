@@ -6,6 +6,7 @@ import { UserData } from '@/app/api/interfaces.ts';
 import getUserData from '@/app/api/getUserData.ts';
 import AccountForm from '@/app/_components/accountform';
 import { redirect } from 'next/navigation';
+import DeleteForm from '../_components/deleteform';
 
 const data: any = getUserData();
 
@@ -51,7 +52,7 @@ async function deleteAccount(): Promise<void> {
             return;
         }
 
-        const response = await fetch('http://localhost:3000/post/delete', { "method": "POST", "credentials": "include" });
+        const response = await fetch('http://localhost:3000/api/user/delete', { "method": "POST", "credentials": "include" });
 
         if (response.status === 401) {
             alert('You must be logged in to delete your account');
@@ -85,9 +86,7 @@ export default function AccountPage(): React.JSX.Element {
                             <button>Logout</button>
                         </form>
 
-                        <form action={deleteAccount}>
-                            <button className={styles.delete}>Delete Account</button>
-                        </form>    
+                        <DeleteForm />
                     </div>
                 </div>
             </section>

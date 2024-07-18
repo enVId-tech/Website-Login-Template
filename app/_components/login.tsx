@@ -21,7 +21,7 @@ async function loginToAccount(username: HTMLInputElement, password: HTMLInputEle
     }
 
     try {
-        const response: Response = await fetch('/api/auth/login', jsonData);
+        const response: Response = await fetch('http://localhost:3000/api/auth/login', jsonData);
         const data: LoginData = await response.json();
 
         if (data.status === 200) {
