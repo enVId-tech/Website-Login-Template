@@ -4,6 +4,7 @@ import Sidebar from '@/app/_components/sidebar.tsx';
 import styles from '@/styles/account.module.scss';
 import { UserData } from '@/app/api/interfaces.ts';
 import getUserData from '@/app/api/getUserData.ts';
+import AccountForm from '@/app/_components/accountform';
 import { redirect } from 'next/navigation';
 
 const data: any = getUserData();
@@ -61,11 +62,11 @@ async function deleteAccount(): Promise<void> {
     }
 }
 
-async function setPassword(): Promise<void> {
+async function setPassword(passwordRef: React.RefObject<HTMLInputElement>, confirmPasswordRef: React.RefObject<HTMLInputElement>): Promise<void> {
     "use server";
     try {
-        const password: string = "e"; // passwordRef.current?.value as string;
-        const confirmPassword: string = "e" // confirmPasswordRef.current?.value as string;
+        const password: string = passwordRef.current?.value as string;
+        const confirmPassword: string = confirmPasswordRef.current?.value as string;
 
         if (password === "" || confirmPassword === "") {
             alert('Please fill out all fields');
@@ -105,13 +106,7 @@ export default function AccountPage(): React.JSX.Element {
                 <Sidebar />
                 <div className={styles.container}>
                     <h1>Account</h1>
-                    <form className={styles.info} action={setPassword}>
-                        <h2>Username: {data?.displayName}</h2>
-                        <h2>Email: {data?.email}</h2>
-                        <input type='password' placeholder='Password' />
-                        <input type='password' placeholder='Confirm Password' />
-                        <button type="submit">Change Password</button>
-                    </form>
+                    <AccountForm />
 
                     <div className={styles.other}>
                         <h1 id="main">Other</h1>
