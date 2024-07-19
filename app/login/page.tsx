@@ -34,7 +34,7 @@ async function guestLogin(): Promise<void> {
 
 async function googleLogin(): Promise<void> {
     "use server";
-    redirect('/auth/google');
+    redirect('/register');
 }
 
 export default async function Login(): Promise<React.JSX.Element> {
@@ -50,7 +50,7 @@ export default async function Login(): Promise<React.JSX.Element> {
                         <hr />
 
                         <form action={googleLogin}>
-                            <button>Register/Sign In with Google</button>
+                            <button>Register</button>
                         </form>
 
                         <hr />
