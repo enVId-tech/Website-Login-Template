@@ -10,30 +10,46 @@ const Work_Sans500 = Work_Sans({
     subsets: ["latin"],
 })
 
-interface RegisterUserProps {
-    username: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-}
+export default function RegisterUserPage(): React.JSX.Element {
+    const usernameRef = React.useRef<HTMLInputElement>(null);
+    const emailRef = React.useRef<HTMLInputElement>(null);
+    const passwordRef = React.useRef<HTMLInputElement>(null);
+    const confirmPasswordRef = React.useRef<HTMLInputElement>(null);
 
-function registerUser({ username, email, password, confirmPassword }: RegisterUserProps): void {
-    if (password !== confirmPassword) {
-        alert('Passwords do not match');
-        return;
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+        event.preventDefault();
+        registerUser();
     }
 
-    fetch('http://localhost:3000/api/auth/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            username: username,
-            email: email,
-            password: password,
-        }),
-    }).then((response: Response) => {
+    const registerUser = async (): Promise<void> => {
+        const username: string = usernameRef.current?.value as string;
+        const email: string = emailRef.current?.value as string;
+        const password: string = passwordRef.current?.value as string;
+        const confirmPassword: string = confirmPasswordRef.current?.value as string;
+
+        if (username === "" || email === "" || password === "" || confirmPassword === "") {
+            alert('Please fill out all fields');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert('Passwords do not match');
+            return;
+        }
+
+        const response: Response = await fetch('http://localhost:3000/api/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "username": username,
+                "email": email,
+                "password": password,
+                "confirmPassword": confirmPassword,
+            }),
+        });
+
         if (response.status === 200) {
             alert('User registration successful');
             redirect('/home');
@@ -41,25 +57,6 @@ function registerUser({ username, email, password, confirmPassword }: RegisterUs
             alert('User registration failed');
             redirect('/register/user');
         }
-    }).catch((error: unknown) => {
-        console.error('Error:', error);
-    });
-}
-
-export default function RegisterUserPage(): React.JSX.Element {
-    const usernameRef = React.useRef<HTMLInputElement>(null);
-    const emailRef = React.useRef<HTMLInputElement>(null);
-    const passwordRef = React.useRef<HTMLInputElement>(null);
-    const confirmPasswordRef = React.useRef<HTMLInputElement>(null);
-
-    function handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
-        event.preventDefault();
-        registerUser({
-            username: usernameRef.current?.value as string,
-            email: emailRef.current?.value as string,
-            password: passwordRef.current?.value as string,
-            confirmPassword: confirmPasswordRef.current?.value as string,
-        });
     }
 
     return (
@@ -68,13 +65,13 @@ export default function RegisterUserPage(): React.JSX.Element {
                 <h1 className={Work_Sans500.className}>Register User</h1>
                 <form className={styles.form} onSubmit={handleSubmit}>
                     <label htmlFor="username" className={Work_Sans500.className}>Username</label>
-                    <input type="text" id="username" name="username" required />
+                    <input type="text" id="username" name="username" ref={usernameRef} required />
                     <label htmlFor="email" className={Work_Sans500.className}>Email</label>
-                    <input type="email" id="email" name="email" required />
+                    <input type="email" id="email" name="email" ref={emailRef} required />
                     <label htmlFor="password" className={Work_Sans500.className}>Password</label>
-                    <input type="password" id="password" name="password" required />
+                    <input type="password" id="password" name="password" ref={passwordRef} required />
                     <label htmlFor="confirmPassword" className={Work_Sans500.className}>Confirm Password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required />
+                    <input type="password" id="confirmPassword" name="confirmPassword" ref={confirmPasswordRef} required />
                     <button className={Work_Sans500.className}>Register</button>
                 </form>
             </div>
