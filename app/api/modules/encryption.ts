@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 const encryptionKey: Buffer = crypto.scryptSync('passphrase', 'salt', 32); // Deriving a secure encryption key using scrypt
 const iv: Buffer = crypto.randomBytes(16); // 16 bytes for AES-256-GCM
 
-type GenerationType = 'number' | 'string' | 'alphanumeric' | 'both';
+type GenerationType = 'number' | 'string' | 'alphanumeric' | 'symbols' | 'all';
 
 function getRandomIndex(max: number): number {
   return Math.floor(Math.random() * max);
@@ -13,14 +13,16 @@ function getRandomIndex(max: number): number {
 /**
  * Generates a random number of specified digits and type
  * @param {number} numberOfDigits - Number of digits to be generated
- * @param {GenerationType} type - Type of generation (number, string, alphanumeric, both)
+ * @param {GenerationType} type - Type of generation (number, string, alphanumeric, symbols, all)
  * @returns {string} - The generated random value
  */
-function generateRandomNumber(numberOfDigits: number, type: GenerationType): string {
+function generateRandomValue(numberOfDigits: number, type: GenerationType): string {
   try {
     const digits: string = '0123456789';
     const characters: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
     const alphanumeric: string = digits + characters;
+    const symbols: string = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
     let validCharacters: string = '';
     switch (type) {
       case 'number':
@@ -32,8 +34,11 @@ function generateRandomNumber(numberOfDigits: number, type: GenerationType): str
       case 'alphanumeric':
         validCharacters = alphanumeric;
         break;
-      case 'both':
-        validCharacters = digits + characters;
+      case 'symbols':
+        validCharacters = symbols;
+        break;
+      case 'all':
+        validCharacters = alphanumeric + symbols;
         break;
       default:
         console.error("\x1b[31m", 'Invalid type of generation, valid types are: number, string, alphanumeric, both');
@@ -188,7 +193,7 @@ function decryptIP(encryptedIP: string): string {
 
 // Export all the functions as a single object with a common name
 const encrypts = {
-  generateRandomNumber,
+  generateRandomValue,
   encryptPassword,
   comparePassword,
   encryptData,
@@ -199,4 +204,4 @@ const encrypts = {
 };
 
 export default encrypts
-export { generateRandomNumber, encryptPassword, comparePassword, encryptData, decryptData, encryptIP, decryptIP, permanentEncryptPassword }
+export { generateRandomValue, encryptPassword, comparePassword, encryptData, decryptData, encryptIP, decryptIP, permanentEncryptPassword }

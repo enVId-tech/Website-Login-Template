@@ -7,7 +7,7 @@ class MongoDBClient {
 
   constructor(uri: string) {
     if (!uri) {
-      throw new Error('MongoDB URI is not defined');
+      throw new Error('MongoDB URI is not defined (MONGODB_URI) must be defined as an environment variable, located in /app/api/modules/env.ts');
     }
     this.client = new MongoClient(uri, {
       maxPoolSize: 10,
@@ -15,7 +15,7 @@ class MongoDBClient {
       maxIdleTimeMS: 30000
     });
   }
-
+  
   /**
    * Connects to the MongoDB database.
    */
