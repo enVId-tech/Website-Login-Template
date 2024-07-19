@@ -22,6 +22,10 @@ export default function Register(): React.JSX.Element {
                     <form action='/auth/google'>
                         <button>Google</button>
                     </form>
+
+                    <form action='/login'>
+                        <button>Back</button>
+                    </form>
                 </div>
             </div>
        </div>

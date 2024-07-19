@@ -18,7 +18,7 @@ async function guestLogin(): Promise<void> {
             headers: {
                 'Content-Type': 'application/json',
             },
-            "cache": "no-store"
+            cache: "no-store"
         });
 
         if (response.status === 200) {

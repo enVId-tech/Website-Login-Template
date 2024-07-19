@@ -1,4 +1,4 @@
-import { getItemsFromDatabase } from '@/app/api/modules/mongoDB.ts';
+import { getItemsFromDatabase, writeToDatabase } from '@/app/api/modules/mongoDB.ts';
 import { NextRequest, NextResponse } from 'next/server';
 import { RegisterData } from '@/app/api/interfaces';
 import { encryptData, generateRandomValue } from '@/app/api/modules/encryption.ts';
@@ -23,10 +23,6 @@ export async function POST(req: NextRequest, res: NextResponse): Promise<NextRes
             return NextResponse.json({ status: 500, message: "Multiple data found" });
         }
 
-        if (fileData[0]._id) {
-            delete fileData[0]._id;
-        }
-
         const hashedPassword = await encryptData(data.password);
 
         console.log("hashedPassword: " + hashedPassword.encryptedData);
@@ -38,7 +34,19 @@ export async function POST(req: NextRequest, res: NextResponse): Promise<NextRes
             sessionToken: generateRandomValue(128, "all"),
         }
 
-        return NextResponse.json({ status: 200, message: "Registered" });
+        const write = await writeToDatabase("users", newUser);
+
+        if (!write) {
+            return NextResponse.json({ status: 500, message: "Error writing to database" });
+        }
+
+        const user = JSON.parse(await getItemsFromDatabase("users", { email: data.email }));
+
+        if (user.length !== 1) {
+            return NextResponse.json({ status: 500, message: "Error reading from database" });
+        }
+
+        return NextResponse.json({ status: 200, message: "User created", userId: user[0].userId });
     } catch (error: unknown) {
         console.error("Error:", error);
         return NextResponse.json({ status: 500, message: "Internal server error" });

@@ -52,10 +52,9 @@ export default function RegisterUserPage(): React.JSX.Element {
 
         if (response.status === 200) {
             alert('User registration successful');
-            redirect('/home');
+            window.location.href = '/login';
         } else {
             alert('User registration failed');
-            redirect('/register/user');
         }
     }
 
