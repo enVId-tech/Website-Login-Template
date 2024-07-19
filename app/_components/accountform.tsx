@@ -2,7 +2,7 @@
 
 import React from "react";
 import styles from "@/styles/account.module.scss";
-import { UserData } from "../api/interfaces";
+import { UserData } from "../api/modules/interfaces";
 
 async function setPassword(passwordRef: React.RefObject<HTMLInputElement>, confirmPasswordRef: React.RefObject<HTMLInputElement>): Promise<void> {
     try {

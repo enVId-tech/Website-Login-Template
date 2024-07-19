@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "@/styles/sidebar.module.scss";
 import getUserData from "@/app/api/getUserData.ts";
-import { UserData } from "@/app/api/interfaces.ts";
+import { UserData } from "@/app/api/modules/interfaces";
 import { redirect } from "next/navigation";
 
 async function account(): Promise<void> {

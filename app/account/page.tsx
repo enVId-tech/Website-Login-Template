@@ -2,7 +2,7 @@ import React from 'react';
 import RootLayout from '@/app/_components/layout.tsx';
 import Sidebar from '@/app/_components/sidebar.tsx';
 import styles from '@/styles/account.module.scss';
-import { UserData } from '@/app/api/interfaces.ts';
+import { UserData } from '@/app/api/modules/interfaces';
 import getUserData from '@/app/api/getUserData.ts';
 import AccountForm from '@/app/_components/accountform';
 import { redirect } from 'next/navigation';

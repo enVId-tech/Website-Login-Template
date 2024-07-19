@@ -1,7 +1,7 @@
 import { getItemsFromDatabase, writeToDatabase } from '@/app/api/modules/mongoDB.ts';
 import { NextRequest, NextResponse } from 'next/server';
-import { RegisterData } from '@/app/api/interfaces';
-import { encryptData, generateRandomValue } from '@/app/api/modules/encryption.ts';
+import { RegisterData } from '@/app/api/modules/interfaces';
+import { generateRandomValue, permanentEncryptPassword } from '@/app/api/modules/encryption.ts';
 
 export const runtime = "nodejs";
 
@@ -23,13 +23,13 @@ export async function POST(req: NextRequest, res: NextResponse): Promise<NextRes
             return NextResponse.json({ status: 500, message: "Multiple data found" });
         }
 
-        const hashedPassword = await encryptData(data.password);
+        const hashedPassword: string = await permanentEncryptPassword(data.password);
 
-        console.log("hashedPassword: " + hashedPassword.encryptedData);
+        console.log("hashedPassword: " + hashedPassword);
 
         const newUser = {
             email: data.email,
-            password: hashedPassword.encryptedData,
+            password: hashedPassword,
             username: data.username,
             sessionToken: generateRandomValue(128, "all"),
         }

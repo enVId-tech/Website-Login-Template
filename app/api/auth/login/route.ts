@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server";
 import { getItemsFromDatabase } from "@/app/api/modules/mongoDB.ts";
 import { comparePassword } from "@/app/api/modules/encryption.ts";
-import { Request, Response } from "express";
+import { UserLoginData } from "@/app/api/modules/interfaces.ts";
 
 export const runtime = "nodejs";
 
 
-export async function POST(req: Request, res: Response): Promise<NextResponse> {
+export async function POST(req: NextResponse, res: NextResponse): Promise<NextResponse> {
     try {
-        const data = req.body;
+        const data: UserLoginData = await req.json() as unknown as UserLoginData;
+
+        console.log("data:", data);
 
         if (!data) {
             throw new Error("No data found");
@@ -23,10 +25,10 @@ export async function POST(req: Request, res: Response): Promise<NextResponse> {
         }
 
         if (await comparePassword(data.password, fileData[0].password)) {
-            res.cookie("userId", fileData[0].userId, {
-                maxAge: 1000 * 60 * 60 * 24 * 3.5, // 3.5 days
-                httpOnly: true,
-            });
+            // req.cookie("userId", fileData[0].userId, {
+            //     maxAge: 1000 * 60 * 60 * 24 * 3.5, // 3.5 days
+            //     httpOnly: true,
+            // });
 
             return NextResponse.json({ status: 200, message: "Logged in" });
         } else {

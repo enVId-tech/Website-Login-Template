@@ -1,6 +1,6 @@
 import RootLayout from "@/app/_components/layout.tsx";
 import getUserData from "@/app/api/getUserData.ts";
-import { UserData } from "@/app/api/interfaces.ts";
+import { UserData } from "@/app/api/modules/interfaces";
 import { redirect } from 'next/navigation';
 import styles from '@/assets/styles/home.module.scss';
 import Sidebar from "../_components/sidebar";

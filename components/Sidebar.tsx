@@ -1,7 +1,7 @@
 import React from "react";
 import '../scss/sidebar.scss';
 import getUserData from '@/app/api/getUserData.ts'
-import { UserData } from '@/app/api/interfaces.ts';
+import { UserData } from '@/app/api/modules/interfaces';
 
 const Sidebar: React.FC = (): React.JSX.Element => {
     const [data, setData] = React.useState<UserData>();

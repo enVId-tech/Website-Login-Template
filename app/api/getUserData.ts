@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { UserData } from "./interfaces";
+import { UserData } from "./modules/interfaces";
 
 export default async function getUserData(): Promise<UserData[] | null | undefined> {
     try {

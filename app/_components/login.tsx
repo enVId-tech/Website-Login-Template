@@ -8,11 +8,13 @@ interface LoginData {
     message: string;
 }
 
-export function LoginComponent(): React.ReactElement {
+export function LoginComponent(): React.JSX.Element {
     const username = React.useRef<HTMLInputElement>(null);
     const password = React.useRef<HTMLInputElement>(null);
 
-    const loginToAccount = async (): Promise<void> => {
+    const loginToAccount = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+        e.preventDefault();
+
         const jsonData: object = {
             "method": "POST",
             "headers": {
@@ -29,8 +31,8 @@ export function LoginComponent(): React.ReactElement {
             const data: LoginData = await response.json();
     
             if (data.status === 200) {
-                // console.log('Login successful!');
-                redirect('/');
+                console.log('Login successful!');
+                // redirect('/');
             } else if (data.status === 404) {
                 console.error('User not found:', data.message);
                 alert('User not found. Please try again.');
@@ -46,7 +48,7 @@ export function LoginComponent(): React.ReactElement {
     }
 
     return (
-        <form onSubmit={() => loginToAccount()}>
+        <form onSubmit={(e) => loginToAccount(e)}>
             <input type="text" placeholder="Email" ref={username} />
             <input type="password" placeholder="Password" autoComplete='current-password' ref={password} />
 
