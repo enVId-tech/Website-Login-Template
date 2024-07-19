@@ -7,4 +7,11 @@ interface UserData {
     profilePicture: string;
 }
 
-export type { UserData }
+interface RegisterData {
+    username: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+}
+
+export type { UserData, RegisterData };
