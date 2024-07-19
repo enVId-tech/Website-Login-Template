@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { getItemsFromDatabase, deleteFromDatabase } from '@/app/api/modules/mongoDB.ts';
 import { NextResponse } from 'next/server';
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request, res: Response): Promise<NextResponse> {
     try {
         const data = req.cookies["userId"];
 

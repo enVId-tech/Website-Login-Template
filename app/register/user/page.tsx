@@ -2,6 +2,7 @@
 
 import styles from '@/styles/register-user.module.scss';
 import { Work_Sans } from 'next/font/google';
+import { redirect } from 'next/navigation';
 import React from 'react';
 
 const Work_Sans500 = Work_Sans({
@@ -17,13 +18,12 @@ interface RegisterUserProps {
 }
 
 function registerUser({ username, email, password, confirmPassword }: RegisterUserProps): void {
-    "use server";
     if (password !== confirmPassword) {
         alert('Passwords do not match');
         return;
     }
 
-    fetch('http://localhost:3000/api/user/register', {
+    fetch('http://localhost:3000/api/auth/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -35,9 +35,11 @@ function registerUser({ username, email, password, confirmPassword }: RegisterUs
         }),
     }).then((response: Response) => {
         if (response.status === 200) {
-            alert('User registered successfully');
+            alert('User registration successful');
+            redirect('/home');
         } else {
             alert('User registration failed');
+            redirect('/register/user');
         }
     }).catch((error: unknown) => {
         console.error('Error:', error);

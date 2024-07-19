@@ -6,7 +6,7 @@ import { Request, Response } from "express";
 export const runtime = "nodejs";
 
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request, res: Response): Promise<NextResponse> {
     try {
         const data = req.body;
 

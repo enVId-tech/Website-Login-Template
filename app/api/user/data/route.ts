@@ -3,7 +3,7 @@ import { NextApiResponse } from "next";
 import { deleteFromDatabase, getItemsFromDatabase } from "@/app/api/modules/mongoDB.ts";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request, res: NextApiResponse) {
+export async function POST(req: Request, res: NextApiResponse): Promise<NextResponse> {
     try {
         console.log("req.cookies:", req.cookies);
         if (req.cookies["userId"] === "guest") {

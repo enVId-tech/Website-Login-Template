@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request, res: Response) {
+export async function GET(req: Request, res: Response): Promise<NextResponse> {
     try {
         res.cookie("userId", "guest", {
             maxAge: 1000 * 60 * 60 * 24 * 1, // 1 day
