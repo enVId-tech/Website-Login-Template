@@ -1,7 +1,6 @@
 import { NextApiResponse } from "next";
 import { deleteFromDatabase, getItemsFromDatabase } from "@/app/api/modules/mongoDB.ts";
 import { NextRequest, NextResponse } from "next/server";
-import { headers } from "next/headers";
 
 export async function POST(req: NextRequest, res: NextApiResponse): Promise<NextResponse> {
     try {

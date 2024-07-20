@@ -27,10 +27,22 @@ export async function POST(req: NextRequest, res: NextResponse): Promise<NextRes
 
         console.log("hashedPassword: " + hashedPassword);
 
+        let firstName: string = "";
+        let lastName: string = "";
+
+        if (data.username.split(" ").length > 1) {
+            firstName = data.username.split(" ")[0];
+            lastName = data.username.split(" ")[1];
+        }
+
         const newUser = {
+            displayName: data.username,
             email: data.email,
             password: hashedPassword,
-            username: data.username,
+            firstname: firstName ? firstName : data.username,
+            lastname: lastName ? lastName : "",
+            hd: "",
+            profilePicture: "",
             sessionToken: "",
         }
 

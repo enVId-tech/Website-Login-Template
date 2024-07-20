@@ -50,7 +50,7 @@ export default function Sidebar(): React.JSX.Element {
         <div className={styles.sidebar}>
             <div className={styles.profile}>
                 <img src={data?.profilePicture ? data?.profilePicture : "https://via.placeholder.com/150"} alt="Profile Picture" />
-                <h2>Logged in as <br /> {data?.username}</h2>
+                <h2>Logged in as <br /> {data?.displayName}</h2>
                 <form action={account}>
                     <button>Account</button>
                 </form>

@@ -2,15 +2,36 @@ import RootLayout from "@/app/_components/layout.tsx";
 import getUserData from "@/app/api/getUserData.ts";
 import { UserData } from "@/app/api/modules/interfaces";
 import styles from '@/styles/logout.module.scss';
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 interface LogoutData {
     error: string;
 }
+function getCookie(name: string): string | null {
+    return cookies().get(name)?.value ?? '';
+}
 
 async function handleLogout(): Promise<void> {
     "use server";
-    const response: Response = await fetch("http://localhost:3000/api/auth/logout", { "method": "POST", "credentials": "include" });
+    const cookie: string | null = await getCookie('sessionToken');
+
+    if (!cookie) {
+        console.error('Error: No session token found');
+        redirect('/login');
+    }
+
+    const response: Response = await fetch("http://localhost:3000/api/auth/logout",
+        {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Cookie': `sessionToken=${cookie}`
+            },
+            cache: "no-store",
+        }
+    );
+
     const data: LogoutData = await response.json();
 
     if (data.error) {

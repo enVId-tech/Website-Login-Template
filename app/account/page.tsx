@@ -23,26 +23,7 @@ function getData(): UserData | undefined {
 
 async function logout(): Promise<void> {
     "use server";
-    try {
-        const response = await fetch('http://localhost:3000/api/auth/logout', { 
-            method: "POST", 
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: "include",
-        });
-
-        const data = await response.json();
-
-        if (data.error) {
-            console.error(data.error);
-            redirect('/home');
-        } else {
-            redirect('/login');
-        }
-    } catch (error: unknown) {
-        console.error('Error:', error as string);
-    }
+    redirect('/logout');
 }
 
 async function deleteAccount(): Promise<void> {
