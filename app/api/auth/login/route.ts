@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server";
-import { getItemsFromDatabase } from "@/app/api/modules/mongoDB.ts";
-import { comparePassword } from "@/app/api/modules/encryption.ts";
+import { NextRequest, NextResponse } from "next/server";
+import { getItemsFromDatabase, modifyInDatabase } from "@/app/api/modules/mongoDB.ts";
+import { comparePassword, generateRandomValue } from "@/app/api/modules/encryption.ts";
 import { UserLoginData } from "@/app/api/modules/interfaces.ts";
 
 export const runtime = "nodejs";
 
 
-export async function POST(req: NextResponse, res: NextResponse): Promise<NextResponse> {
+export async function POST(req: NextRequest, res: NextResponse): Promise<NextResponse> {
     try {
         const data: UserLoginData = await req.json() as unknown as UserLoginData;
 
@@ -25,12 +25,25 @@ export async function POST(req: NextResponse, res: NextResponse): Promise<NextRe
         }
 
         if (await comparePassword(data.password, fileData[0].password)) {
-            // req.cookie("userId", fileData[0].userId, {
-            //     maxAge: 1000 * 60 * 60 * 24 * 3.5, // 3.5 days
-            //     httpOnly: true,
-            // });
+            const newSessionToken = generateRandomValue(256, "all");
 
-            return NextResponse.json({ status: 200, message: "Logged in" });
+            console.log("newSessionToken:", newSessionToken);
+
+            fileData[0].sessionToken = newSessionToken;
+
+            delete fileData[0]._id;
+
+            await modifyInDatabase({ email: data.username }, fileData[0], "users");
+
+            return NextResponse.json(
+                { 
+                    status: 200, 
+                    message: "Logged in",
+                    headers: {
+                        "Set-Cookie": `sessionToken=${newSessionToken}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${60 * 60 * 24 * 3}` // 3 days
+                    }
+                }
+            );
         } else {
             return NextResponse.json({ status: 401, message: "Incorrect password" });
         }

@@ -1,7 +1,7 @@
 import { getItemsFromDatabase, writeToDatabase } from '@/app/api/modules/mongoDB.ts';
 import { NextRequest, NextResponse } from 'next/server';
 import { RegisterData } from '@/app/api/modules/interfaces';
-import { generateRandomValue, permanentEncryptPassword } from '@/app/api/modules/encryption.ts';
+import { permanentEncryptPassword } from '@/app/api/modules/encryption.ts';
 
 export const runtime = "nodejs";
 
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest, res: NextResponse): Promise<NextRes
             email: data.email,
             password: hashedPassword,
             username: data.username,
-            sessionToken: generateRandomValue(128, "all"),
+            sessionToken: "",
         }
 
         const write = await writeToDatabase("users", newUser);
