@@ -6,7 +6,7 @@ function getCookie(name: string): string | null {
     return cookies().get(name)?.value ?? '';
 }
 
-export default async function getUserData(): Promise<UserData[] | null | undefined> {
+export default async function getUserData(): Promise<UserData | null | undefined> {
     try {
         const cookie: string | null = await getCookie('sessionToken');
 
@@ -51,7 +51,6 @@ export default async function getUserData(): Promise<UserData[] | null | undefin
         return data.data;
     } catch (error: unknown) {
         console.error('Error:', error);
+        return null;
     }
-
-    return;
 }

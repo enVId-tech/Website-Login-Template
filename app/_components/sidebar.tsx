@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "@/styles/sidebar.module.scss";
 import getUserData from "@/app/api/getUserData.ts";
-import { UserData } from "@/app/api/modules/interfaces";
+import { type UserData } from "@/app/api/modules/interfaces";
 import { redirect } from "next/navigation";
 
 async function account(): Promise<void> {
@@ -17,8 +17,8 @@ async function account(): Promise<void> {
 }
 
 function getData(): UserData | undefined {
-    getUserData().then((data: UserData[] | null | undefined) => {
-        return data ? data[0] : undefined;
+    getUserData().then((data: UserData | null | undefined) => {
+        return data;
     }).catch((error: unknown) => {
         console.error('Error:', error)
         return undefined;
@@ -30,11 +30,27 @@ function getData(): UserData | undefined {
 export default function Sidebar(): React.JSX.Element {
     const data: UserData | undefined = getData();
 
+    console.log(data);
+
+    let setData = {};
+
+    if (!data) {
+        console.error('Guest account');
+        setData = {
+            firstName: 'Guest',
+            lastName: 'Account',
+            email: '',
+            profilePicture: '',
+            displayName: 'Guest Account',
+            hd: '',
+        }
+    }
+
     return (
         <div className={styles.sidebar}>
             <div className={styles.profile}>
                 <img src={data?.profilePicture ? data?.profilePicture : "https://via.placeholder.com/150"} alt="Profile Picture" />
-                <h2>Logged in as <br /> {data?.firstName}</h2>
+                <h2>Logged in as <br /> {data?.username}</h2>
                 <form action={account}>
                     <button>Account</button>
                 </form>

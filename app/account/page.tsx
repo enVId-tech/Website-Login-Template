@@ -11,8 +11,8 @@ import DeleteForm from '../_components/deleteform';
 const data: any = getUserData();
 
 function getData(): UserData | undefined {
-    getUserData().then((data: UserData[] | null | undefined) => {
-        return data ? data[0] : undefined;
+    getUserData().then((data: UserData | null | undefined) => {
+        return data ? data : undefined;
     }).catch((error: unknown) => {
         console.error('Error:', error)
         return undefined;
