@@ -37,11 +37,11 @@ export async function POST(req: NextRequest, res: NextResponse): Promise<NextRes
             fileData[0].sessionToken = "";
         }
 
-        await modifyInDatabase({ email: data.email }, fileData[0], "users");
+        await modifyInDatabase({ email: fileData.email }, fileData[0], "users");
 
         const response = NextResponse.json({ status: 200, message: "Logged out" });
 
-        response.headers.set('Set-Cookie', `sessionToken=""; Path=/; HttpOnly; SameSite=Strict; Max-Age=0`);
+        response.headers.set('Set-Cookie', 'sessionToken=""; Path=/; HttpOnly; SameSite=Strict; Max-Age=0;');
 
         return response;
     } catch (error) {
