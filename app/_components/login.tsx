@@ -12,6 +12,12 @@ export function LoginComponent(): React.JSX.Element {
     const username = React.useRef<HTMLInputElement>(null);
     const password = React.useRef<HTMLInputElement>(null);
 
+    React.useEffect(() => {
+        if (document.cookie.includes('session')) {
+            window.location.href = '/';
+        }
+    }, []);
+
     const loginToAccount = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
 
@@ -32,7 +38,7 @@ export function LoginComponent(): React.JSX.Element {
     
             if (data.status === 200) {
                 console.log('Login successful!');
-                // redirect('/');
+                window.location.href = '/';
             } else if (data.status === 404) {
                 console.error('User not found:', data.message);
                 alert('User not found. Please try again.');

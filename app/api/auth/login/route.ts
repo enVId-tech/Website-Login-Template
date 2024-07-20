@@ -25,7 +25,7 @@ export async function POST(req: NextRequest, res: NextResponse): Promise<NextRes
         }
 
         if (await comparePassword(data.password, fileData[0].password)) {
-            const newSessionToken = generateRandomValue(256, "all");
+            const newSessionToken = generateRandomValue(256, "alphanumeric");
 
             console.log("newSessionToken:", newSessionToken);
 
@@ -35,15 +35,16 @@ export async function POST(req: NextRequest, res: NextResponse): Promise<NextRes
 
             await modifyInDatabase({ email: data.username }, fileData[0], "users");
 
-            return NextResponse.json(
-                { 
-                    status: 200, 
-                    message: "Logged in",
-                    headers: {
-                        "Set-Cookie": `sessionToken=${newSessionToken}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${60 * 60 * 24 * 3}` // 3 days
-                    }
+            const response = NextResponse.json(
+                {
+                    status: 200,
+                    message: "Logged in"
                 }
             );
+
+            response.headers.set('Set-Cookie', `sessionToken=${newSessionToken}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${60 * 60 * 24 * 3}`); // 3 days
+
+            return response;
         } else {
             return NextResponse.json({ status: 401, message: "Incorrect password" });
         }

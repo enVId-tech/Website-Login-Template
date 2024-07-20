@@ -65,14 +65,20 @@ export default function RegisterUserPage(): React.JSX.Element {
                 <form className={styles.form} onSubmit={handleSubmit}>
                     <label htmlFor="username" className={Work_Sans500.className}>Username</label>
                     <input type="text" id="username" name="username" ref={usernameRef} required />
+                    
                     <label htmlFor="email" className={Work_Sans500.className}>Email</label>
                     <input type="email" id="email" name="email" ref={emailRef} required />
+                    
                     <label htmlFor="password" className={Work_Sans500.className}>Password</label>
                     <input type="password" id="password" name="password" ref={passwordRef} required />
+                    
                     <label htmlFor="confirmPassword" className={Work_Sans500.className}>Confirm Password</label>
                     <input type="password" id="confirmPassword" name="confirmPassword" ref={confirmPasswordRef} required />
+                    
                     <button className={Work_Sans500.className}>Register</button>
                 </form>
+
+                <button className={Work_Sans500.className} onClick={() => window.location.href = "/login"}>Cancel</button>
             </div>
         </div>
     );

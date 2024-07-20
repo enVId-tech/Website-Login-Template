@@ -21,18 +21,18 @@ async function userData(): Promise<HomeData | undefined> {
 
         if (userData === undefined) {
             console.error('Guest account');
-            setData({
-                firstName: 'Guest',
-                lastName: 'Account',
-                email: '',
-                profilePicture: '',
-                displayName: 'Guest Account',
-                hd: '',
-            })
+            // setData({
+            //     firstName: 'Guest',
+            //     lastName: 'Account',
+            //     email: '',
+            //     profilePicture: '',
+            //     displayName: 'Guest Account',
+            //     hd: '',
+            // })
             return;
         }
 
-        setData(userData![0]);
+        // setData(/userData![0]);
     } catch (error: unknown) {
         console.error('Error:', error as string);
     }
@@ -62,8 +62,4 @@ export default async function Home(): Promise<React.JSX.Element> {
             </section>
         </RootLayout>
     )
-}
-
-function setData(arg0: UserData) {
-    throw new Error("Function not implemented.");
 }

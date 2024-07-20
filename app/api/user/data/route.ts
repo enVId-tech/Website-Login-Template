@@ -1,23 +1,27 @@
-import { Request } from "express";
 import { NextApiResponse } from "next";
 import { deleteFromDatabase, getItemsFromDatabase } from "@/app/api/modules/mongoDB.ts";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { headers } from "next/headers";
 
-export async function POST(req: Request, res: NextApiResponse): Promise<NextResponse> {
+export async function POST(req: NextRequest, res: NextApiResponse): Promise<NextResponse> {
     try {
-        console.log("req.cookies:", req.cookies);
-        if (req.cookies["userId"] === "guest") {
+        const cookies = req.headers.get("cookie");
+        const sessionToken = cookies?.split(";").find((cookie: string) => cookie.includes("sessionToken"))?.split("=")[1];
+        
+        if (!sessionToken) {
             return NextResponse.json({ status: 401, message: "You must be logged in to view user data" });
-        } else if (!req.cookies["userId"]) {
-            return NextResponse.json({ status: 404, message: "No data found" });
+        }
+        
+        if (sessionToken === "guest") {
+            return NextResponse.json({ status: 401, message: "You must be logged in to view user data" });
         }
 
-        const fileData = JSON.parse(await getItemsFromDatabase("users", { userId: req.cookies["userId"] }));
+        const fileData = JSON.parse(await getItemsFromDatabase("users", { sessionToken }));
 
         if (!fileData || fileData.length === 0) {
-            NextResponse.json({ status: 404, message: "No data found" });
+            return NextResponse.json({ status: 404, message: "No data found" });
         } else if (fileData.length > 1) {
-            await deleteFromDatabase({ userId: req.cookies["userId"] }, "users", "many");
+            await deleteFromDatabase({ sessionToken }, "users", "many");
             return NextResponse.json({ status: 500, message: "Multiple data found" });
         }
 
@@ -25,11 +29,11 @@ export async function POST(req: Request, res: NextApiResponse): Promise<NextResp
             delete fileData[0]._id;
         }
 
-        if (fileData[0].userId) {
-            delete fileData[0].userId;
+        if (fileData[0].sessionToken) {
+            delete fileData[0].sessionToken;
         }
 
-        return NextResponse.json(fileData);
+        return NextResponse.json({ status: 200, message: "User data found", data: fileData[0] });
     } catch (error: unknown) {
         console.error("Error:", error);
         return NextResponse.json({ status: 500, message: "Internal server error" });
