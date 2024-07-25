@@ -1,14 +1,22 @@
+"use client";
 import React from "react";
 import styles from "@/styles/account.module.scss";
 
 async function deleteAccount(): Promise<void> {
-    "use server";
     try {
         if (!confirm('Are you sure you want to delete your account?')) {
             return;
         }
 
-        const response = await fetch('http://localhost:3000/api/user/delete', { "method": "POST", "credentials": "include" });
+        const response: Response = await fetch('http://localhost:3000/api/user/delete', 
+            { 
+                "method": "POST", 
+                "headers": {
+                    'Content-Type': 'application/json',
+                    'Cookie': `sessionToken=${document.cookie}`
+                },
+            }
+        );
 
         if (response.status === 401) {
             alert('You must be logged in to delete your account');

@@ -3,6 +3,7 @@ import styles from "@/styles/sidebar.module.scss";
 import getUserData from "@/app/api/getUserData.ts";
 import { type UserData } from "@/app/api/modules/interfaces";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 async function account(): Promise<void> {
     "use server";
@@ -15,28 +16,26 @@ async function account(): Promise<void> {
     redirect('/account');
 }
 
-export default async function Sidebar(): Promise<React.JSX.Element> {
-    let setData: UserData | undefined | null = await getUserData();
+function getCookie(name: string): string | null {
+    return cookies().get(name)?.value ?? '';
+}
 
-    if (!setData) {
-        setData = {
-            firstName: "Guest",
-            lastName: null,
-            email: "guest@localhost",
-            profilePicture: "https://via.placeholder.com/150",
-            displayName: "Guest",
-            hd: null,
-        }
-    }
+export default async function Sidebar(): Promise<React.JSX.Element> {
+    const sessionToken: string | null = await getCookie('sessionToken');
+
+    let setData: UserData | undefined | null = await getUserData();
 
     return (
         <div className={styles.sidebar}>
             <div className={styles.profile}>
                 <img src={setData?.profilePicture ? setData?.profilePicture : "https://via.placeholder.com/150"} alt="Profile Picture" />
                 <h2>Logged in as <br /> {setData?.displayName}</h2>
-                <form action={account}>
-                    <button>Account</button>
-                </form>
+                {
+                    sessionToken === 'guest' ? null : <form action={account}>
+                        <button>Account</button>
+                    </form>
+                }
+
             </div>
             <div className={styles.pages}>
                 <span className="pageSelector">

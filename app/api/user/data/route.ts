@@ -12,7 +12,18 @@ export async function POST(req: NextRequest, res: NextApiResponse): Promise<Next
         }
         
         if (sessionToken === "guest") {
-            return NextResponse.json({ status: 401, message: "You must be logged in to view user data" });
+            return NextResponse.json({ 
+                status: 401, 
+                message: "You must be logged in to view user data", 
+                data: {
+                    displayName: "Guest",
+                    email: "",
+                    firstname: "Guest",
+                    lastname: "",
+                    hd: "",
+                    profilePicture: "",
+                } 
+            });
         }
 
         const fileData = JSON.parse(await getItemsFromDatabase("users", { sessionToken }));

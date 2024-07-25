@@ -13,11 +13,14 @@ export default async function getUserData(): Promise<UserData | null | undefined
     try {
         const cookie: string | null = await getCookie('sessionToken');
 
+        console.log(cookie);
+
         if (!cookie || cookie === null) {
             console.error('Error: No session token found');
             redirectTo = '/login';
         }
 
+        return;
         const response: Response = await fetch('http://localhost:3000/api/user/data', 
             { 
                 method: "POST", 
@@ -39,7 +42,6 @@ export default async function getUserData(): Promise<UserData | null | undefined
             redirectTo = '/login';
         } else if (data.status === 401) {
             console.log("Guest account");
-            return
         } else if (data.status === 500) {
             console.error('Error: An error occurred. Please try again later.');
             redirectTo = '/login';

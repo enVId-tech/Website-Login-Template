@@ -2,8 +2,6 @@ import React from 'react';
 import RootLayout from '@/app/_components/layout.tsx';
 import Sidebar from '@/app/_components/sidebar.tsx';
 import styles from '@/styles/account.module.scss';
-import { UserData } from '@/app/api/modules/interfaces';
-import getUserData from '@/app/api/getUserData.ts';
 import AccountForm from '@/app/_components/accountform';
 import { redirect } from 'next/navigation';
 import DeleteForm from '../_components/deleteform';
@@ -14,35 +12,20 @@ async function logout(): Promise<void> {
     redirect('/logout');
 }
 
-async function deleteAccount(): Promise<void> {
-    "use server";
-    try {
-        if (!confirm('Are you sure you want to delete your account?')) {
-            return;
-        }
-
-        const response = await fetch('http://localhost:3000/api/user/delete', { "method": "POST", "credentials": "include" });
-
-        if (response.status === 401) {
-            alert('You must be logged in to delete your account');
-            return;
-        } else if (response.status === 500) {
-            alert('An error occurred. Please try again later.');
-            return;
-        } else if (response.status === 404) {
-            alert('No account found');
-            return;
-        } else {
-            cookies().delete("sessionToken");
-            redirect('/login');
-        }
-    } catch (error: unknown) {
-        console.error('Error:', error as string);
-    }
+function getCookie(name: string): string | null {
+    return cookies().get(name)?.value ?? '';
 }
 
 export default async function AccountPage(): Promise<React.JSX.Element> {
-    let data: UserData | undefined | null = await getUserData();
+    const sessionToken: string | null = await getCookie('sessionToken');
+
+    if (!sessionToken || sessionToken === '') {
+        redirect('/login');
+    }
+
+    if (sessionToken === 'guest') {
+        redirect('/');
+    }
 
     return (
         <RootLayout>
