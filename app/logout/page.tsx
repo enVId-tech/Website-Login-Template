@@ -32,6 +32,7 @@ async function handleLogout(): Promise<void> {
         }
     );
 
+
     const data: LogoutData = await response.json();
 
     if (data.error) {
@@ -39,6 +40,7 @@ async function handleLogout(): Promise<void> {
         redirect("/home");
     }
     
+    cookies().delete("sessionToken");
     redirect("/login");
 }
 

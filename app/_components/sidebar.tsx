@@ -9,7 +9,6 @@ async function account(): Promise<void> {
     if (await getUserData() === null) {
         redirect('/login');
     } else if (await getUserData() === undefined) {
-        alert('Guest accounts cannot access this page. Please login.');
         return;
     }
 

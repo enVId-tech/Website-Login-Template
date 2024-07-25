@@ -19,8 +19,6 @@ export async function POST(req: NextRequest, res: NextResponse): Promise<NextRes
             await deleteFromDatabase({ sessionToken: data }, "events", "one");
         }
 
-        res.cookies.set("sessionToken", "", { path: "/", httpOnly: true, sameSite: "strict", maxAge: 0 });
-
         return NextResponse.redirect("/login");
     } catch (error: unknown) {
         console.error("Error:", error);

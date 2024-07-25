@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest, res: NextResponse): Promise<NextResponse> {
     try {
-        const cookies = req.headers.get("cookie");
-        const sessionToken = cookies?.split(";").find((cookie: string) => cookie.includes("sessionToken"))?.split("=")[1];
+        const cookiesMain = req.headers.get("cookie");
+        const sessionToken = cookiesMain?.split(";").find((cookie: string) => cookie.includes("sessionToken"))?.split("=")[1];
 
         if (!sessionToken) {
             return NextResponse.json({ status: 401, message: "You must be logged in to view user data" });
@@ -15,8 +15,6 @@ export async function POST(req: NextRequest, res: NextResponse): Promise<NextRes
                 status: 200,
                 message: "Logged out"
             });
-
-            response.headers.set('Set-Cookie', `sessionToken=""; Path=/; HttpOnly; SameSite=Strict; Max-Age=0`);
 
             return response;
         }
@@ -40,8 +38,6 @@ export async function POST(req: NextRequest, res: NextResponse): Promise<NextRes
         await modifyInDatabase({ email: fileData.email }, fileData[0], "users");
 
         const response = NextResponse.json({ status: 200, message: "Logged out" });
-
-        response.headers.set('Set-Cookie', 'sessionToken=""; Path=/; HttpOnly; SameSite=Strict; Max-Age=0;');
 
         return response;
     } catch (error) {

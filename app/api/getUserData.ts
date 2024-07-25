@@ -8,12 +8,14 @@ function getCookie(name: string): string | null {
 }
 
 export default async function getUserData(): Promise<UserData | null | undefined> {
+    let redirectTo: string = '';
+
     try {
         const cookie: string | null = await getCookie('sessionToken');
 
-        if (!cookie) {
+        if (!cookie || cookie === null) {
             console.error('Error: No session token found');
-            redirect('/login');
+            redirectTo = '/login';
         }
 
         const response: Response = await fetch('http://localhost:3000/api/user/data', 
@@ -31,16 +33,16 @@ export default async function getUserData(): Promise<UserData | null | undefined
 
         if (data.status === 404) {
             console.error('Error: No user data found');
-            redirect('/login');
+            redirectTo = '/login';
         } else if (data.status === 400) {
             console.error('Error: Bad request');
-            redirect('/login');
+            redirectTo = '/login';
         } else if (data.status === 401) {
             console.log("Guest account");
             return
         } else if (data.status === 500) {
             console.error('Error: An error occurred. Please try again later.');
-            redirect('/login');
+            redirectTo = '/login';
         }
 
         if (!data || data === null) {
@@ -53,5 +55,10 @@ export default async function getUserData(): Promise<UserData | null | undefined
     } catch (error: unknown) {
         console.error('Error:', error);
         return null;
+    } finally {
+        if (redirectTo == '') {
+            return
+        }
+        redirect('/login');
     }
 }

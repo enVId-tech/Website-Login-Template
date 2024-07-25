@@ -7,6 +7,7 @@ import getUserData from '@/app/api/getUserData.ts';
 import AccountForm from '@/app/_components/accountform';
 import { redirect } from 'next/navigation';
 import DeleteForm from '../_components/deleteform';
+import { cookies } from 'next/headers';
 
 async function logout(): Promise<void> {
     "use server";
@@ -32,6 +33,7 @@ async function deleteAccount(): Promise<void> {
             alert('No account found');
             return;
         } else {
+            cookies().delete("sessionToken");
             redirect('/login');
         }
     } catch (error: unknown) {

@@ -8,7 +8,7 @@ export async function POST(req: NextRequest, res: NextApiResponse): Promise<Next
         const sessionToken = cookies?.split(";").find((cookie: string) => cookie.includes("sessionToken"))?.split("=")[1];
         
         if (!sessionToken) {
-            return NextResponse.json({ status: 401, message: "You must be logged in to view user data" });
+            return NextResponse.json({ status: 404, message: "No session token found" });
         }
         
         if (sessionToken === "guest") {
