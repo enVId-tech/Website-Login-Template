@@ -1,26 +1,25 @@
-import { Request, Response } from 'express';
 import { getItemsFromDatabase, deleteFromDatabase } from '@/app/api/modules/mongoDB.ts';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: Request, res: Response): Promise<NextResponse> {
+export async function POST(req: NextRequest, res: NextResponse): Promise<NextResponse> {
     try {
-        const data = req.cookies["userId"];
+        const data = req.headers.get("cookie")?.split(";").find((cookie: string) => cookie.includes("userId"))?.split("=")[1];
 
         if (!data) {
             return NextResponse.json({ status: 400, message: "No data found" });
         }
 
-        const deleted = await deleteFromDatabase({ userId: data }, "users", "one");
+        const deleted = await deleteFromDatabase({ sessionToken: data }, "users", "one");
 
         if (!deleted) {
             return NextResponse.json({ status: 404, message: "No data found" });
         }
 
         if (await getItemsFromDatabase("events", { userId: data })) {
-            await deleteFromDatabase({ userId: data }, "events", "one");
+            await deleteFromDatabase({ sessionToken: data }, "events", "one");
         }
 
-        res.clearCookie("userId");
+        res.cookies.set("sessionToken", "", { path: "/", httpOnly: true, sameSite: "strict", maxAge: 0 });
 
         return NextResponse.redirect("/login");
     } catch (error: unknown) {

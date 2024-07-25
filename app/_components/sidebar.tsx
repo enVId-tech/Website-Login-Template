@@ -5,6 +5,7 @@ import { type UserData } from "@/app/api/modules/interfaces";
 import { redirect } from "next/navigation";
 
 async function account(): Promise<void> {
+    "use server";
     if (await getUserData() === null) {
         redirect('/login');
     } else if (await getUserData() === undefined) {
@@ -34,7 +35,7 @@ export default async function Sidebar(): Promise<React.JSX.Element> {
             <div className={styles.profile}>
                 <img src={setData?.profilePicture ? setData?.profilePicture : "https://via.placeholder.com/150"} alt="Profile Picture" />
                 <h2>Logged in as <br /> {setData?.displayName}</h2>
-                <form action={account()}>
+                <form action={account}>
                     <button>Account</button>
                 </form>
             </div>

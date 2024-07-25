@@ -8,19 +8,6 @@ import AccountForm from '@/app/_components/accountform';
 import { redirect } from 'next/navigation';
 import DeleteForm from '../_components/deleteform';
 
-const data: any = getUserData();
-
-function getData(): UserData | undefined {
-    getUserData().then((data: UserData | null | undefined) => {
-        return data ? data : undefined;
-    }).catch((error: unknown) => {
-        console.error('Error:', error)
-        return undefined;
-    });
-
-    return undefined;
-}
-
 async function logout(): Promise<void> {
     "use server";
     redirect('/logout');
@@ -52,7 +39,9 @@ async function deleteAccount(): Promise<void> {
     }
 }
 
-export default function AccountPage(): React.JSX.Element {
+export default async function AccountPage(): Promise<React.JSX.Element> {
+    let data: UserData | undefined | null = await getUserData();
+
     return (
         <RootLayout>
             <section className={styles.account}>

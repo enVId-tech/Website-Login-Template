@@ -44,15 +44,38 @@ export default function AccountForm(): React.JSX.Element {
     const passwordRef = React.useRef<HTMLInputElement>(null);
     const confirmPasswordRef = React.useRef<HTMLInputElement>(null);
 
-    // const [data, setData] = React.useState<UserData | null>(null);
-    const [data, setData] = React.useState<UserData | null>({
-        displayName: 'John Doe',
-        email: '',
-        firstName: 'John',
-        lastName: 'Doe',
-        hd: '',
-        profilePicture: ''
-    });
+    const [data, setData] = React.useState<UserData | null>(null);
+
+    React.useEffect(() => {
+        async function fetchData(): Promise<void> {
+            const response = await fetch('/api/user/data', { "method": "POST", "credentials": "include" });
+            const data = await response.json();
+
+            if (data.status === 404) {
+                console.error('Error: No user data found');
+                return;
+            } else if (data.status === 400) {
+                console.error('Error: Bad request');
+                return;
+            } else if (data.status === 401) {
+                console.log("Guest account");
+                return;
+            } else if (data.status === 500) {
+                console.error('Error: An error occurred. Please try again later.');
+                return;
+            }
+
+            if (!data || data === null) {
+                console.error(data);
+                console.error('Error: No data found');
+                return;
+            }
+
+            setData(data.data);
+        }
+
+        fetchData();
+    }, []);
 
     return (
         data === null ? <h1>Loading...</h1> :
