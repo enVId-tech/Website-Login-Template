@@ -16,17 +16,8 @@ interface HomeData {
 
 export default async function Home(): Promise<React.JSX.Element> {
     let data: UserData | undefined | null = await getUserData();
-    
-    if (!data) {
-        return <RootLayout>
-            <section id="home">
-                <Sidebar />
-                <div id="container">
-                    <h1>Welcome, Guest Account!</h1>
-                </div>
-            </section>
-        </RootLayout>
-    }
+
+    console.log(data);
 
     return (
         <RootLayout>

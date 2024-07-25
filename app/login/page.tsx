@@ -19,27 +19,23 @@ async function guestLogin(): Promise<void> {
     "use server";
     let redirectTo: string = '';
 
-    try {
-        const response: Response = await fetch('http://localhost:3000/api/auth/login/guest', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            cache: "no-store"
-        });
-
-        if (!getCookie('sessionToken')) {
-            console.error('Error: No session token found');
-            redirectTo = '/login';
-            throw Error('No session token found');
+    const jsonData = {
+        "method": "GET",
+        "headers": {
+            'Content-Type': 'application/json',
         }
+    }
 
-        if (response.status === 200) {
+    try {
+        const response: Response = await fetch('http://localhost:3000/api/auth/login/guest', jsonData);
+
+        const data: LoginData = await response.json();
+
+        if (data.status === 200) {
             console.log('Login successful!');
             redirectTo = "/"
-        } else {
-            console.error('Login failed:', response.statusText);
+        } else if (data.status === 404) {
+            console.error('Login failed:', data.message);
         }
     } catch (error: unknown) {
         console.error('Error:', error as string);

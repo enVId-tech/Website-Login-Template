@@ -56,9 +56,8 @@ export default async function getUserData(): Promise<UserData | null | undefined
         console.error('Error:', error);
         return null;
     } finally {
-        if (redirectTo == '') {
-            return
+        if (redirectTo !== '') {
+            redirect(redirectTo);
         }
-        redirect('/login');
     }
 }
