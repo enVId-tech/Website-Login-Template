@@ -5,7 +5,6 @@ import { type UserData } from "@/app/api/modules/interfaces";
 import { redirect } from "next/navigation";
 
 async function account(): Promise<void> {
-    "use server";
     if (await getUserData() === null) {
         redirect('/login');
     } else if (await getUserData() === undefined) {
@@ -16,42 +15,26 @@ async function account(): Promise<void> {
     redirect('/account');
 }
 
-function getData(): UserData | undefined {
-    getUserData().then((data: UserData | null | undefined) => {
-        return data;
-    }).catch((error: unknown) => {
-        console.error('Error:', error)
-        return undefined;
-    });
+export default async function Sidebar(): Promise<React.JSX.Element> {
+    let setData: UserData | undefined | null = await getUserData();
 
-    return undefined;
-}
-
-export default function Sidebar(): React.JSX.Element {
-    const data: UserData | undefined = getData();
-
-    console.log(data);
-
-    let setData = {};
-
-    if (!data) {
-        console.error('Guest account');
+    if (!setData) {
         setData = {
-            firstName: 'Guest',
-            lastName: 'Account',
-            email: '',
-            profilePicture: '',
-            displayName: 'Guest Account',
-            hd: '',
+            firstName: "Guest",
+            lastName: null,
+            email: "guest@localhost",
+            profilePicture: "https://via.placeholder.com/150",
+            displayName: "Guest",
+            hd: null,
         }
     }
 
     return (
         <div className={styles.sidebar}>
             <div className={styles.profile}>
-                <img src={data?.profilePicture ? data?.profilePicture : "https://via.placeholder.com/150"} alt="Profile Picture" />
-                <h2>Logged in as <br /> {data?.displayName}</h2>
-                <form action={account}>
+                <img src={setData?.profilePicture ? setData?.profilePicture : "https://via.placeholder.com/150"} alt="Profile Picture" />
+                <h2>Logged in as <br /> {setData?.displayName}</h2>
+                <form action={account()}>
                     <button>Account</button>
                 </form>
             </div>

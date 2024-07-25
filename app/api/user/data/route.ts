@@ -32,9 +32,14 @@ export async function POST(req: NextRequest, res: NextApiResponse): Promise<Next
             delete fileData[0].sessionToken;
         }
 
+        if (fileData[0].password) {
+            delete fileData[0].password;
+        }
+
         return NextResponse.json({ status: 200, message: "User data found", data: fileData[0] });
     } catch (error: unknown) {
         console.error("Error:", error);
-        return NextResponse.json({ status: 500, message: "Internal server error" });
+        // return NextResponse.json({ status: 500, message: "Internal server error" })
+        return NextResponse.redirect("/login");
     }
 }
