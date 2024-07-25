@@ -25,9 +25,7 @@ export async function POST(req: NextRequest, res: NextResponse): Promise<NextRes
         }
 
         if (await comparePassword(data.password, fileData[0].password)) {
-            const newSessionToken = generateRandomValue(256, "alphanumeric");
-
-            console.log("newSessionToken:", newSessionToken);
+            const newSessionToken: string = generateRandomValue(256, "alphanumeric");
 
             fileData[0].sessionToken = newSessionToken;
 
@@ -35,7 +33,7 @@ export async function POST(req: NextRequest, res: NextResponse): Promise<NextRes
 
             await modifyInDatabase({ email: data.username }, fileData[0], "users");
 
-            const response = NextResponse.json(
+            const response: NextResponse = NextResponse.json(
                 {
                     status: 200,
                     message: "Logged in"

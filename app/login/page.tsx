@@ -5,45 +5,11 @@ import { LoginComponent } from "../_components/login";
 import styles from "@/styles/login.module.scss";
 import { cookies } from "next/headers";
 import { get } from "http";
+import { GuestLoginComponent } from "../_components/guestlogin";
 
 interface LoginData {
     status: number;
     message: string;
-}
-
-function getCookie(name: string): string | null {
-    return cookies().get(name)?.value ?? '';
-}
-
-async function guestLogin(): Promise<void> {
-    "use server";
-    let redirectTo: string = '';
-
-    const jsonData = {
-        "method": "GET",
-        "headers": {
-            'Content-Type': 'application/json',
-        }
-    }
-
-    try {
-        const response: Response = await fetch('http://localhost:3000/api/auth/login/guest', jsonData);
-
-        const data: LoginData = await response.json();
-
-        if (data.status === 200) {
-            console.log('Login successful!');
-            redirectTo = "/"
-        } else if (data.status === 404) {
-            console.error('Login failed:', data.message);
-        }
-    } catch (error: unknown) {
-        console.error('Error:', error as string);
-    } finally {
-        if (redirectTo !== '') {
-            redirect(redirectTo);
-        }
-    }
 }
 
 async function googleLogin(): Promise<void> {
@@ -52,6 +18,12 @@ async function googleLogin(): Promise<void> {
 }
 
 export default async function Login(): Promise<React.JSX.Element> {
+    const cookie: string | null = cookies().get('sessionToken')?.value ?? '';
+
+    if (cookie) {
+        redirect('/');
+    }
+
     return (
         <RootLayout>
             <section className={styles.login}>
@@ -69,9 +41,7 @@ export default async function Login(): Promise<React.JSX.Element> {
 
                         <hr />
 
-                        <form action={guestLogin}>
-                            <button>Continue as Guest</button>
-                        </form>
+                        <GuestLoginComponent />
                     </div>
                 </div>
             </section>
