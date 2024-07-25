@@ -17,8 +17,6 @@ interface HomeData {
 export default async function Home(): Promise<React.JSX.Element> {
     let data: UserData | undefined | null = await getUserData();
 
-    console.log(data);
-
     return (
         <RootLayout>
             <section className={styles.home}>

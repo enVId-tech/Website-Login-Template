@@ -4,13 +4,7 @@ import React from "react";
 import { LoginComponent } from "../_components/login";
 import styles from "@/styles/login.module.scss";
 import { cookies } from "next/headers";
-import { get } from "http";
 import { GuestLoginComponent } from "../_components/guestlogin";
-
-interface LoginData {
-    status: number;
-    message: string;
-}
 
 async function googleLogin(): Promise<void> {
     "use server";

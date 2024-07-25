@@ -13,7 +13,7 @@ async function deleteAccount(): Promise<void> {
                 "method": "POST", 
                 "headers": {
                     'Content-Type': 'application/json',
-                    'Cookie': `sessionToken=${document.cookie}`
+                    "credentials": "include"
                 },
             }
         );
@@ -33,6 +33,7 @@ async function deleteAccount(): Promise<void> {
             return;
         }
 
+        window.location.href = '/login';
         alert('Account deleted successfully');
     } catch (error: unknown) {
         console.error('Error:', error as string);

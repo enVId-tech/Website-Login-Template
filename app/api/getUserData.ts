@@ -1,4 +1,4 @@
-"use server"
+"use server";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { UserData } from "./modules/interfaces";
@@ -7,20 +7,19 @@ function getCookie(name: string): string | null {
     return cookies().get(name)?.value ?? '';
 }
 
-export default async function getUserData(): Promise<UserData | null | undefined> {
+export default async function getUserData(retries?: number): Promise<UserData | null | undefined> {
     let redirectTo: string = '';
 
     try {
         const cookie: string | null = await getCookie('sessionToken');
 
-        console.log(cookie);
+        console.log('Cookie:', cookie);
 
         if (!cookie || cookie === null) {
             console.error('Error: No session token found');
             redirectTo = '/login';
         }
 
-        return;
         const response: Response = await fetch('http://localhost:3000/api/user/data', 
             { 
                 method: "POST", 
@@ -36,9 +35,18 @@ export default async function getUserData(): Promise<UserData | null | undefined
 
         if (data.status === 404) {
             console.error('Error: No user data found');
+
+            console.log(cookies().get('sessionToken'));
+            cookies().delete('sessionToken');
+
             redirectTo = '/login';
         } else if (data.status === 400) {
             console.error('Error: Bad request');
+
+            if (retries && retries > 0) {
+                return getUserData(3 - retries);
+            }
+
             redirectTo = '/login';
         } else if (data.status === 401) {
             console.log("Guest account");
