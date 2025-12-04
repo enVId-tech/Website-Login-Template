@@ -3,8 +3,8 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { UserData } from "./modules/interfaces";
 
-function getCookie(name: string): string | null {
-    return cookies().get(name)?.value ?? '';
+async function getCookie(name: string): Promise<string | null> {
+    return (await cookies()).get(name)?.value ?? '';
 }
 
 export default async function getUserData(retries?: number): Promise<UserData | null | undefined> {
@@ -36,8 +36,8 @@ export default async function getUserData(retries?: number): Promise<UserData | 
         if (data.status === 404) {
             console.error('Error: No user data found');
 
-            console.log(cookies().get('sessionToken'));
-            cookies().delete('sessionToken');
+            console.log((await cookies()).get('sessionToken'));
+            (await cookies()).delete('sessionToken');
 
             redirectTo = '/login';
         } else if (data.status === 400) {

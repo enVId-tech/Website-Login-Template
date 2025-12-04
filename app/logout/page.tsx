@@ -1,4 +1,3 @@
-import RootLayout from "@/app/_components/layout.tsx";
 import getUserData from "@/app/api/getUserData.ts";
 import { UserData } from "@/app/api/modules/interfaces";
 import styles from '@/styles/logout.module.scss';
@@ -8,8 +7,8 @@ import { redirect } from "next/navigation";
 interface LogoutData {
     error: string;
 }
-function getCookie(name: string): string | null {
-    return cookies().get(name)?.value ?? '';
+async function getCookie(name: string): Promise<string | null> {
+    return (await cookies()).get(name)?.value ?? '';
 }
 
 async function handleLogout(): Promise<void> {
@@ -39,8 +38,8 @@ async function handleLogout(): Promise<void> {
         alert(data.error);
         redirect("/home");
     }
-    
-    cookies().delete("sessionToken");
+
+    (await cookies()).delete("sessionToken");
     redirect("/login");
 }
 
@@ -53,21 +52,19 @@ export default async function Logout(): Promise<React.JSX.Element> {
     await getUserData();
 
     return (
-        <RootLayout>
-            <section className={styles.logout}>
-                <div className={styles.container}>
-                    <h1>Logout</h1>
-                    <p>Are you sure you want to logout?</p>
+        <section className={styles.logout}>
+            <div className={styles.container}>
+                <h1>Logout</h1>
+                <p>Are you sure you want to logout?</p>
 
-                    <form action={handleLogout}>
-                        <button>Yes</button>
-                    </form>
+                <form action={handleLogout}>
+                    <button>Yes</button>
+                </form>
 
-                    <form action={handleCancel}>
-                        <button>No</button>
-                    </form>
-                </div>
-            </section>
-        </RootLayout>
+                <form action={handleCancel}>
+                    <button>No</button>
+                </form>
+            </div>
+        </section>
     )
 }

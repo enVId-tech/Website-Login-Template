@@ -1,5 +1,4 @@
 import React from 'react';
-import RootLayout from '@/app/_components/layout.tsx';
 import Sidebar from '@/app/_components/sidebar.tsx';
 import styles from '@/styles/account.module.scss';
 import AccountForm from '@/app/_components/accountform';
@@ -12,8 +11,8 @@ async function logout(): Promise<void> {
     redirect('/logout');
 }
 
-function getCookie(name: string): string | null {
-    return cookies().get(name)?.value ?? '';
+async function getCookie(name: string): Promise<string | null> {
+    return (await cookies()).get(name)?.value ?? '';
 }
 
 export default async function AccountPage(): Promise<React.JSX.Element> {
@@ -28,23 +27,21 @@ export default async function AccountPage(): Promise<React.JSX.Element> {
     }
 
     return (
-        <RootLayout>
-            <section className={styles.account}>
-                <Sidebar />
-                <div className={styles.container}>
-                    <h1>Account</h1>
-                    <AccountForm />
+        <section className={styles.account}>
+            <Sidebar />
+            <div className={styles.container}>
+                <h1>Account</h1>
+                <AccountForm />
 
-                    <div className={styles.other}>
-                        <h1 id="main">Other</h1>
-                        <form action={logout}>
-                            <button>Logout</button>
-                        </form>
+                <div className={styles.other}>
+                    <h1 id="main">Other</h1>
+                    <form action={logout}>
+                        <button>Logout</button>
+                    </form>
 
-                        <DeleteForm />
-                    </div>
+                    <DeleteForm />
                 </div>
-            </section>
-        </RootLayout>
+            </div>
+        </section>
     )
 }

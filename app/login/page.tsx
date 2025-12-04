@@ -1,4 +1,3 @@
-import RootLayout from "@/app/_components/layout.tsx";
 import { redirect } from "next/navigation";
 import React from "react";
 import { LoginComponent } from "../_components/login";
@@ -12,33 +11,31 @@ async function googleLogin(): Promise<void> {
 }
 
 export default async function Login(): Promise<React.JSX.Element> {
-    const cookie: string | null = cookies().get('sessionToken')?.value ?? '';
+    const cookie: string | null = (await cookies()).get('sessionToken')?.value ?? '';
 
     if (cookie) {
         redirect('/');
     }
 
     return (
-        <RootLayout>
-            <section className={styles.login}>
-                <div className={styles.container}>
-                    <div className={styles.regLogin}>
-                        <h1>Login</h1>
+        <section className={styles.login}>
+            <div className={styles.container}>
+                <div className={styles.regLogin}>
+                    <h1>Login</h1>
 
-                        <LoginComponent />
+                    <LoginComponent />
 
-                        <hr />
+                    <hr />
 
-                        <form action={googleLogin}>
-                            <button>Register</button>
-                        </form>
+                    <form action={googleLogin}>
+                        <button>Register</button>
+                    </form>
 
-                        <hr />
+                    <hr />
 
-                        <GuestLoginComponent />
-                    </div>
+                    <GuestLoginComponent />
                 </div>
-            </section>
-        </RootLayout>
+            </div>
+        </section>
     )
 }

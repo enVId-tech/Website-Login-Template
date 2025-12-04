@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import React from "react";
 
 export default async function HomePageRedirect(): Promise<React.JSX.Element> {
-    if (cookies().get('sessionToken')?.value) {
+    if ((await cookies()).get('sessionToken')?.value) {
         redirect('/home');
     } else {
         redirect('/login');

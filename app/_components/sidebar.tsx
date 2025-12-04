@@ -16,8 +16,8 @@ async function account(): Promise<void> {
     redirect('/account');
 }
 
-function getCookie(name: string): string | null {
-    return cookies().get(name)?.value ?? '';
+async function getCookie(name: string): Promise<string | null> {
+    return (await cookies()).get(name)?.value ?? '';
 }
 
 export default async function Sidebar(): Promise<React.JSX.Element> {

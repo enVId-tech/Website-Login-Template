@@ -16,7 +16,7 @@ export async function POST(req: NextRequest, res: NextResponse): Promise<NextRes
 
         const deleted = await deleteFromDatabase({ sessionToken: data }, "users", "one");
 
-        cookies().delete("sessionToken");
+        (await cookies()).delete("sessionToken");
 
         if (!deleted) {
             return NextResponse.json({ status: 404, message: "No data found" });
